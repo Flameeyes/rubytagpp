@@ -1,0 +1,87 @@
+# kate: encoding UTF-8; remove-trailing-space on; replace-trailing-space-save on; space-indent on; indent-width 2;
+{
+  bindings: "rubytag",
+  includes: [
+    "<taglib/taglib.h>",
+    "<taglib/tag.h>",
+    "<taglib/id3v1tag.h>",
+    "<taglib/id3v2tag.h>",
+    "<taglib/xiphcomment.h>",
+    "<taglib/apetag.h>",
+    "<taglib/tfile.h>",
+    "<taglib/flacfile.h>",
+    "<taglib/mpcfile.h>",
+    "<taglib/mpegfile.h>",
+    "<taglib/oggfile.h>",
+    "<taglib/oggflacfile.h>",
+    "<taglib/vorbisfile.h>"
+  ],
+  namespaces: {
+    TagLib: {
+      classes: {
+        File: {
+          methods: {
+            "name": { return: "char*", params: {} },
+            "tag": { return: "Tag*", params: {} },
+            "save": { return: "bool", params: {} },
+            "readOnly": { return: "bool", params: {} },
+            "isOpen": { return: "bool", params: {} },
+            "isValid": { return: "bool", params: {} }
+          },
+          attributes: {
+            "title": { funcget: "title", funcset: "setTitle", type: "String" },
+            "artist": { funcget: "artist", funcset: "setArtist", type: "String" },
+            "album": { funcget: "album", funcset: "setAlbum", type: "String" },
+            "comment": { funcget: "comment", funcset: "setComment", type: "String" },
+            "genre": { funcget: "genre", funcset: "setGenre", type: "String" },
+            "year": { funcget: "year", funcset: "setYear", type: "uint" },
+            "year": { funcget: "track", funcset: "setTrack", type: "uint" }
+          }
+        },
+        Tag: {
+          methods: {
+            "isEmpty": { return "bool", params: {} }
+          }
+        }
+      }
+    },
+    TagLib::FLAC: {
+      classes: {
+        File: {
+          parent: "TagLib::File"
+        }
+      }
+    },
+    TagLib::ID3v2: {
+      classes: {
+        Tag: {
+          parent: "TagLib::Tag"
+        }
+      }
+    },
+    TagLib::ID3v1: {
+      classes: {
+        Tag: {
+          parent: "TagLib::Tag"
+        }
+      }
+    },
+    TagLib::APE: {
+      classes: {
+        Tag: {
+          parent: "TagLib::Tag"
+        }
+      }
+    },
+    TagLib::Ogg: {
+      classes: {
+        XiphComment: {
+          parent: "TagLib::Tag",
+          methods: {
+            "addField": { return: "void", params: {key: "String", value: "String", replace: "bool"} }
+          }
+        }
+      }
+    }
+  }
+}

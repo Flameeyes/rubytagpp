@@ -1,0 +1,9 @@
+rubytag.cpp
+rubytag.h
+cmake_install.cmake
+Makefile
+CMakeTmp/
+CMakeFiles/
+CMakeCache.txt
+CMakeFiles
+CMakeTmp
