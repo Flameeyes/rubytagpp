@@ -14,7 +14,8 @@
     "<taglib/mpegfile.h>",
     "<taglib/oggfile.h>",
     "<taglib/oggflacfile.h>",
-    "<taglib/vorbisfile.h>"
+    "<taglib/vorbisfile.h>",
+    "\"conversions.h\""
   ],
   namespaces: {
     TagLib: {
