@@ -1,3 +1,4 @@
+# kate: encoding UTF-8; remove-trailing-space on; replace-trailing-space-save on; space-indent on; indent-width 3;
 
 class Namespace
    attr_reader :name

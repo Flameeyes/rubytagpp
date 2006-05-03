@@ -1,3 +1,4 @@
+# kate: encoding UTF-8; remove-trailing-space on; replace-trailing-space-save on; space-indent on; indent-width 3;
 
 class Class
    attr_reader :ns, :name
@@ -60,68 +61,76 @@ class Class
       ret << "\n"
    end
 
+   def function_free
+      @parent ? "#{@parent.gsub("::", "__")}_free" : "#{varname}_free"
+   end
+
+   def parentvar
+      @parent ? "c#{@parent.sub("::", "__")}" : "rb_cObject"
+   end
+
    def unit
       ret = "VALUE c#{varname};\n"
 
       unless @parent
-         ret << \
-            "T#{ptrmap} #{ptrmap};\n\n" \
-            "static void #{varname}_free(void *p) {\n" \
-            "  T#{ptrmap}::iterator it, eend = #{ptrmap}.end();\n" \
-            "  for(it = #{ptrmap}.begin(); it != eend; it++)\n" \
-            "     if ( (*it).second == (#{@ns.name}::#{@name}*)p ) {\n" \
-            "        #{ptrmap}.erase(it); break;\n" \
-            "     }\n" \
-            "  delete (#{@ns.name}::#{@name}*)p;\n" \
-            "}\n\n"
-         freer_function="#{varname}_free"
-      else
-         freer_function="#{@parent.gsub("::", "__")}_free"
+         ret << %@
+T#{ptrmap} #{ptrmap};
+
+static void #{varname}_free(void *p) {
+  T#{ptrmap}::iterator it, eend = #{ptrmap}.end();
+  for(it = #{ptrmap}.begin(); it != eend; it++)
+     if ( (*it).second == (#{@ns.name}::#{@name}*)p ) {
+        #{ptrmap}.erase(it); break;
+     }
+  delete (#{@ns.name}::#{@name}*)p;
+}
+
+@
       end
 
-      ret << \
-         "#{@ns.name}::#{@name}* ruby2#{varname}(VALUE rval) {\n" \
-         "  T#{ptrmap}::iterator it = #{ptrmap}.find(rval);\n" \
-         "  if ( it == #{ptrmap}.end() ) {\n" \
-         "     rb_raise(rb_eException, \"#{@ns.name}::#{@name} instance not found in ptrMap\");\n" \
-         "     return NULL;\n" \
-         "  }\n" \
-         "  return dynamic_cast<#{@ns.name}::#{@name}*>((*it).second);\n" \
-         "}\n\n"
+      ret << %@
 
-      ret << \
-         "VALUE #{varname}2ruby(#{@ns.name}::#{@name}* instance) {\n" \
-         "  T#{ptrmap}::iterator it, eend = #{ptrmap}.end();\n" \
-         "  for(it = #{ptrmap}.begin(); it != eend; it++)\n" \
-         "     if ( (*it).second == (#{@ns.name}::#{@name}*)instance ) break;\n" \
-         "  if ( it != #{ptrmap}.end() )\n" \
-         "     return (*it).first;\n" \
-         "  else {\n" \
-         "     VALUE rval = Data_Wrap_Struct(c#{varname}, 0, #{freer_function}, instance);\n" \
-         "     #{ptrmap}[rval] = instance;\n" \
-         "     return rval;\n" \
-         "  }\n" \
-         "}\n\n"
+#{@ns.name}::#{@name}* ruby2#{varname}(VALUE rval) {
+  T#{ptrmap}::iterator it = #{ptrmap}.find(rval);
 
-      @methods.each { |method|
-         ret << method.binding_stub
-      }
+  if ( it == #{ptrmap}.end() ) {
+     rb_raise(rb_eException, "#{@ns.name}::#{@name} instance not found in ptrMap");
+     return NULL;
+  }
 
+  return dynamic_cast<#{@ns.name}::#{@name}*>((*it).second);
+}
+
+VALUE #{varname}2ruby(#{@ns.name}::#{@name}* instance) {
+  T#{ptrmap}::iterator it, eend = #{ptrmap}.end();
+
+  for(it = #{ptrmap}.begin(); it != eend; it++)
+     if ( (*it).second == (#{@ns.name}::#{@name}*)instance ) break;
+
+  if ( it != #{ptrmap}.end() )
+     return (*it).first;
+  else {
+     VALUE rval = Data_Wrap_Struct(c#{varname}, 0, #{function_free}, instance);
+     #{ptrmap}[rval] = instance;
+     return rval;
+  }
+}
+@
+
+      @methods.each { |method| ret << method.binding_stub }
       ret << "\n"
    end
 
+   def methods_init
+      res = ""
+      @methods.each do |method| res << method.init; end
+      res
+   end
+
    def init
-      unless @parent
-         parentvar = "rb_cObject"
-      else
-         parentvar = "c#{@parent.sub("::", "__")}"
-      end
-      ret = "c#{varname} = rb_define_class_under(#{@ns.varname}, \"#{@name.split("::").last}\", #{parentvar});\n"
-
-      @methods.each { |method|
-         ret << method.init
-      }
-
-      ret << "\n"
+      %@
+c#{varname} = rb_define_class_under(#{@ns.varname}, \"#{@name.split("::").last}\", #{parentvar});
+#{methods_init}
+      @
    end
 end
