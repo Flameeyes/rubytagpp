@@ -8,7 +8,7 @@ FIND_PACKAGE(TagLib REQUIRED)
 ADD_CUSTOM_COMMAND(
 	OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/rubytag.cpp
 	COMMAND ${RUBY_EXECUTABLE}
-	ARGS ${CMAKE_CURRENT_SOURCE_DIR}/generator/generator.rb ${CMAKE_CURRENT_SOURCE_DIR}/generator/description.yml
+	ARGS -C${CMAKE_CURRENT_SOURCE_DIR}/generator ${CMAKE_CURRENT_SOURCE_DIR}/generator/generator.rb ${CMAKE_CURRENT_SOURCE_DIR}/generator/description.yml
 	DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/generator/generator.rb ${CMAKE_CURRENT_SOURCE_DIR}/generator/description.yml
 )
 
