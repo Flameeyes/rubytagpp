@@ -23,8 +23,8 @@ class ClassMethod
       end
 
       if content and content["params"]
-         content["params"].each_pair { |pmname, pmtype|
-            @params << Parameter.new(pmtype, pmname)
+         content["params"].each { |p|
+            @params << Parameter.new(p["type"], p["name"])
          }
       end
    end

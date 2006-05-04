@@ -28,7 +28,9 @@
             "readOnly": { return: "bool", params: {} },
             "isOpen": { return: "bool", params: {} },
             "isValid": { return: "bool", params: {} }
-          },
+          }
+        },
+        Tag: {
           attributes: {
             "title": { funcget: "title", funcset: "setTitle", type: "String" },
             "artist": { funcget: "artist", funcset: "setArtist", type: "String" },
@@ -37,9 +39,7 @@
             "genre": { funcget: "genre", funcset: "setGenre", type: "String" },
             "year": { funcget: "year", funcset: "setYear", type: "uint" },
             "year": { funcget: "track", funcset: "setTrack", type: "uint" }
-          }
-        },
-        Tag: {
+          },
           methods: {
             "isEmpty": { return "bool", params: {} }
           }
@@ -79,7 +79,11 @@
         XiphComment: {
           parent: "TagLib::Tag",
           methods: {
-            "addField": { return: "void", params: {key: "String", value: "String", replace: "bool"} }
+            "addField": { return: "void", params: [
+                {name: "key", type: "String"},
+                {name: "value", type: "String"},
+                {name: "replace", type: "bool"}
+              ] }
           }
         }
       }
