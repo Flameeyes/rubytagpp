@@ -50,7 +50,7 @@ class ClassMethod
    def params_conversion
       ret = ""
       @params.each { |p|
-         ret << " ruby2#{p.type.sub("*", "Ptr")}(#{p.name}),"
+         ret << " ruby2#{p.type.sub("*", "Ptr").gsub("::", "_")}(#{p.name}),"
       } if @params
 
       ret.chomp!(",")

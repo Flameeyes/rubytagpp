@@ -55,3 +55,8 @@ static inline TagLib::String ruby2String(VALUE rval)
     Check_Type(rval, T_STRING);
     return TagLib::String(StringValuePtr(rval));
 }
+
+static inline TagLib::AudioProperties::ReadStyle ruby2TagLib_AudioProperties_ReadStyle(VALUE rval)
+{
+    return (TagLib::AudioProperties::ReadStyle)ruby2int(rval);
+}
