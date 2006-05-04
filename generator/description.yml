@@ -17,8 +17,8 @@
     "<taglib/vorbisfile.h>",
     "\"conversions.h\""
   ],
-  namespaces: {
-    TagLib: {
+  namespaces: [
+    { name: "TagLib",
       classes: {
         File: {
           methods: {
@@ -46,35 +46,35 @@
         }
       }
     },
-    TagLib::FLAC: {
+    { name: "TagLib::FLAC",
       classes: {
         File: {
           parent: "TagLib::File"
         }
       }
     },
-    TagLib::ID3v2: {
+    { name: "TagLib::ID3v2",
       classes: {
         Tag: {
           parent: "TagLib::Tag"
         }
       }
     },
-    TagLib::ID3v1: {
+    { name: "TagLib::ID3v1",
       classes: {
         Tag: {
           parent: "TagLib::Tag"
         }
       }
     },
-    TagLib::APE: {
+    { name: "TagLib::APE",
       classes: {
         Tag: {
           parent: "TagLib::Tag"
         }
       }
     },
-    TagLib::Ogg: {
+    { name: "TagLib::Ogg",
       classes: {
         XiphComment: {
           parent: "TagLib::Tag",
@@ -88,5 +88,5 @@
         }
       }
     }
-  }
+  ]
 }

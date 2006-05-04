@@ -12,8 +12,9 @@ description = YAML::load(File.new(ARGV[0]).read)
 namespaces = Array.new
 bindings = description["bindings"]
 
-description["namespaces"].each_pair do |nsname, nscont|
-   namespaces << Namespace.new(nsname, nscont)
+description["namespaces"].each do |ns|
+   puts "Error in parsing description file, unnamed namespace." unless ns["name"]
+   namespaces << Namespace.new(ns["name"], ns)
 end
 
 header = File.new("#{bindings}.h", "w")
