@@ -62,7 +62,7 @@
           parent: "TagLib::File",
           methods: [
             { name: "File",
-              variant: "1", params: [
+              params: [
                 {name: "file", type: "char*"},
                 {name: "readProperties", type: "bool", optional: "yes"},
                 {name: "propertiesStyle", type: "TagLib::AudioProperties::ReadStyle", optional: "yes" }
@@ -131,13 +131,41 @@
           parent: "TagLib::Ogg::File",
           methods: [
             { name: "File",
-              variant: "1", params: [
+              params: [
                 {name: "file", type: "char*"},
                 {name: "readProperties", type: "bool", optional: "yes"},
                 {name: "propertiesStyle", type: "TagLib::AudioProperties::ReadStyle", optional: "yes" }
               ]
             },
             { name: "audioProperties", return: "TagLib::Vorbis::Properties" }
+          ]
+        }
+      ]
+    },
+    { name: "TagLib::MPEG",
+      classes: [
+        { name: "File",
+          parent: "TagLib::File",
+          methods: [
+            { name: "File",
+              params: [
+                {name: "file", type: "char*"},
+                {name: "readProperties", type: "bool", optional: "yes"},
+                {name: "propertiesStyle", type: "TagLib::AudioProperties::ReadStyle", optional: "yes" }
+              ]
+            },
+            { name: "save",
+              params: [
+                {name: "tags", type: "int", optional: "yes"},
+                {name: "stripOthers", type: "bool", optional: "yes"}
+              ]
+            },
+            { name: "strip",
+              params: [
+                {name: "tags", type: "int", optional: "yes"},
+                {name: "freeMemory", type: "bool", optional: "yes"}
+              ]
+            }
           ]
         }
       ]
