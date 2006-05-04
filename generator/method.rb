@@ -37,7 +37,7 @@ class ClassMethod
    end
 
    def varname
-      "f#{@cls.ns.name.sub("::", "_")}__#{@cls.name}__#{@name}"
+      "f#{@cls.ns.name.gsub("::", "_")}_#{@cls.name}_#{@name}"
    end
 
    def binding_prototype

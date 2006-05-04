@@ -2,12 +2,14 @@
 
 class Class
    attr_reader :ns, :name
+   @@classes = Hash.new
 
    def initialize(ns, name, content)
       @ns = ns
       @name = name
+      @@classes["#{@ns.name}::#{@name}"] = self
       @methods = Array.new
-      @parent = content["parent"]
+      @parent = content["parent"] ? @@classes[content["parent"]] : nil
 
       if content["methods"]
          content["methods"].each { |method|
@@ -30,17 +32,14 @@ class Class
    end
 
    def varname
-      "#{@ns.name.sub("::", "_")}__#{@name}"
+      "#{@ns.name.gsub("::", "_")}_#{@name}"
    end
 
    def ptrmap
       unless @parent
-         "#{@ns.name.sub("::", "_")}__#{@name}_ptrMap"
+         "#{@ns.name.gsub("::", "_")}_#{@name}_ptrMap"
       else
-         tokens = @parent.split("::")
-         classname = tokens.pop
-
-         "#{tokens.join("_")}__#{classname}_ptrMap"
+         @parent.ptrmap
       end
    end
 
@@ -63,11 +62,11 @@ class Class
    end
 
    def function_free
-      @parent ? "#{@parent.gsub("::", "__")}_free" : "#{varname}_free"
+      @parent ? @parent.function_free : "#{varname}_free"
    end
 
    def parentvar
-      @parent ? "c#{@parent.sub("::", "__")}" : "rb_cObject"
+      @parent ? "c#{@parent.varname}" : "rb_cObject"
    end
 
    def unit

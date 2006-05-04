@@ -7,13 +7,13 @@ class Namespace
       @name = name
       @classes = Array.new
 
-      content["classes"].each_pair { |clsname, clscont|
-         @classes << Class.new(self, clsname, clscont)
+      content["classes"].each { |klass|
+         @classes << Class.new(self, klass["name"], klass)
       }
    end
 
    def varname
-      "m#{@name.sub("::", "_")}"
+      "m#{@name.gsub("::", "_")}"
    end
 
    def header

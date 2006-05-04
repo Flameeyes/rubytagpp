@@ -19,8 +19,8 @@
   ],
   namespaces: [
     { name: "TagLib",
-      classes: {
-        AudioProperties: {
+      classes: [
+        { name: "AudioProperties",
           methods: [
             { name: "length", return: "int" },
             { name: "bitrate", return: "int" },
@@ -28,7 +28,7 @@
             { name: "channels", return: "int" }
           ]
         },
-        File: {
+        { name: "File",
           methods: [
             { name: "name", return: "char*" },
             { name: "tag", return: "Tag*" },
@@ -38,7 +38,7 @@
             { name: "isValid", return: "bool" }
           ]
         },
-        Tag: {
+        { name: "Tag",
           attributes: {
             "title": { funcget: "title", funcset: "setTitle", type: "String" },
             "artist": { funcget: "artist", funcset: "setArtist", type: "String" },
@@ -52,11 +52,11 @@
             { name: "isEmpty", return "bool" }
           ]
         }
-      }
+      ]
     },
     { name: "TagLib::FLAC",
-      classes: {
-        File: {
+      classes: [
+        { name: "File",
           parent: "TagLib::File",
           methods: [
             { name: "File",
@@ -68,32 +68,35 @@
             }
           ]
         }
-      }
+      ]
     },
     { name: "TagLib::ID3v2",
-      classes: {
-        Tag: {
+      classes: [
+        { name: "Tag",
           parent: "TagLib::Tag"
         }
-      }
+      ]
     },
     { name: "TagLib::ID3v1",
-      classes: {
-        Tag: {
+      classes: [
+        { name: "Tag",
           parent: "TagLib::Tag"
         }
-      }
+      ]
     },
     { name: "TagLib::APE",
-      classes: {
-        Tag: {
+      classes: [
+        { name: "Tag",
           parent: "TagLib::Tag"
         }
-      }
+      ]
     },
     { name: "TagLib::Ogg",
-      classes: {
-        XiphComment: {
+      classes: [
+        { name: "File",
+          parent: "TagLib::File"
+        },
+        { name: "XiphComment",
           parent: "TagLib::Tag",
           methods: [
             { name: "addField",
@@ -105,7 +108,23 @@
             }
           ]
         }
-      }
+      ]
+    },
+    { name: "TagLib::Ogg::Vorbis",
+      classes: [
+        { name: "File",
+          parent: "TagLib::Ogg::File",
+          methods: [
+            { name: "File",
+              variant: "1", params: [
+                {name: "file", type: "char*"},
+                {name: "readProperties", type: "bool", optional: "yes"},
+                {name: "propertiesStyle", type: "TagLib::AudioProperties::ReadStyle", optional: "yes" }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }
