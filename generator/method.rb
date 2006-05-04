@@ -61,12 +61,13 @@ class ClassMethod
          return constructor_stub
       end
 
-      ret = \
-         "#{binding_prototype} {\n" \
-         "  #{@cls.ns.name}::#{@cls.name}* tmp = ruby2#{@cls.varname}(self);\n" \
-         "  if ( ! tmp ) return Qnil;\n" \
-         "  \n"
-      ret << "  "
+      ret = %@
+#{binding_prototype} {
+   #{@cls.ns.name}::#{@cls.name}* tmp = ruby2#{@cls.varname}(self);
+   fprintf(stderr, "Called #{@cls.ns.name}::#{@cls.name}::#{@name} for value %x (%p).\\n", self, tmp);
+   if ( ! tmp ) return Qnil; // The exception is thrown by ruby2*
+
+  @
 
       if @return and @return != "void"
          ret << "return cxx2ruby(tmp->#{@name}(#{params_conversion}));\n"
@@ -81,6 +82,8 @@ class ClassMethod
       %@
 #{binding_prototype} {
    #{@cls.ns.name}::#{@cls.name}* tmp = new #{@cls.ns.name}::#{@cls.name}(#{params_conversion});
+
+   return cxx2ruby(tmp);
 }
 @
    end
