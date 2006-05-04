@@ -7,6 +7,11 @@ static inline VALUE cxx2ruby(uint val)
     return INT2FIX(val);
 }
 
+static inline VALUE cxx2ruby(int val)
+{
+    return INT2FIX(val);
+}
+
 static inline VALUE cxx2ruby(const char *val)
 {
     return rb_str_new2(val);
@@ -20,6 +25,11 @@ static inline VALUE cxx2ruby(bool val)
 static inline uint ruby2uint(VALUE rval)
 {
     return NUM2INT(rval);
+}
+
+static inline int ruby2int(VALUE rval)
+{
+    return NUM2UINT(rval);
 }
 
 static inline bool ruby2bool(VALUE rval)
