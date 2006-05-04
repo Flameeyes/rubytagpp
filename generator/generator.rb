@@ -29,11 +29,6 @@ end
 unit.puts %@#include "#{bindings}.h"
 @
 
-header.puts %@
-extern "C" {
-
-@
-
 namespaces.each { |ns|
    header.puts(ns.header)
    unit.puts(ns.unit)
@@ -54,9 +49,5 @@ namespaces.each { |ns|
 unit.puts %@
 } /* Init_#{bindings} */
 
-} /* extern C */
-@
-
-header.puts %@
 } /* extern C */
 @
