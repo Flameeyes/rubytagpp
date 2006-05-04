@@ -49,7 +49,15 @@
     { name: "TagLib::FLAC",
       classes: {
         File: {
-          parent: "TagLib::File"
+          parent: "TagLib::File",
+          methods: {
+            "File": { params: [
+                {name: "file", type: "char*"},
+                {name: "readProperties", type: "bool"}
+                # TODO TODO TODO
+                # {name: "propertiesStyle", type: "Properties::ReadStyle" }
+              ] }
+          }
         }
       }
     },

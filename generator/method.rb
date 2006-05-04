@@ -16,6 +16,10 @@ class ClassMethod
          @bindname = name
       end
 
+      if @name == @cls.name
+         @bindname = "initialize"
+      end
+
       if content
          @return = content["return"]
       else
@@ -43,42 +47,42 @@ class ClassMethod
       prototype << " )"
    end
 
+   def params_conversion
+      ret = ""
+      @params.each { |p|
+         ret << " ruby2#{p.type.sub("*", "Ptr")}(#{p.name}),"
+      } if @params
+
+      ret.chomp!(",")
+   end
+
    def binding_stub
+      if @bindname == "initialize"
+         return constructor_stub
+      end
+
       ret = \
          "#{binding_prototype} {\n" \
          "  #{@cls.ns.name}::#{@cls.name}* tmp = ruby2#{@cls.varname}(self);\n" \
          "  if ( ! tmp ) return Qnil;\n" \
          "  \n"
-      if @params.empty?
-         if @return != "void"
-            ret << "  return cxx2ruby ( tmp->#{@name}() );\n"
-         else
-            ret << \
-               "  tmp->#{@name}();\n" \
-               "  return Qnil;"
-         end
+      ret << "  "
+
+      if @return and @return != "void"
+         ret << "return cxx2ruby(tmp->#{@name}(#{params_conversion}));\n"
       else
-         ret << "  "
-         if @return != "void"
-            ret << "#{@return} res = "
-         end
-
-         ret << "tmp->#{@name}("
-
-         @params.each { |p|
-            ret << " ruby2#{p.type}(#{p.name}),"
-         }
-
-         ret.chomp!(",")
-         ret << " );\n" <<
-
-         if @return == "void"
-            "  return Qnil;\n"
-         else
-            "  return res;"
-         end
+         ret << "tmp->#{@name}(#{params_conversion}); return Qnil;\n"
       end
-      ret << "}\n\n"
+
+      ret << "}\n"
+   end
+
+   def constructor_stub
+      %@
+#{binding_prototype} {
+   #{@cls.ns.name}::#{@cls.name}* tmp = new #{@cls.ns.name}::#{@cls.name}(#{params_conversion});
+}
+@
    end
 
    def init
