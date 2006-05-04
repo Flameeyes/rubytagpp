@@ -36,7 +36,7 @@ namespaces.each { |ns|
 
 unit.puts
 
-unit.puts "void binds_initialise() {\n"
+unit.puts "void Init_#{bindings}() {\n"
 
 namespaces.each { |ns|
    unit.puts "#{ns.init}"
