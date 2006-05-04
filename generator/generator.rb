@@ -25,9 +25,13 @@ description["includes"].each do |libincl|
    header.puts "#include #{libincl}"
 end
 
-unit.puts "#include \"#{bindings}.h\"\n\n"
+unit.puts %@#include "#{bindings}.h"
+@
 
-header.puts
+header.puts %@
+extern "C" {
+
+@
 
 namespaces.each { |ns|
    header.puts(ns.header)
@@ -36,10 +40,22 @@ namespaces.each { |ns|
 
 unit.puts
 
-unit.puts "void Init_#{bindings}() {\n"
+unit.puts %@
+extern "C" {
+
+void Init_#{bindings}() {
+@
 
 namespaces.each { |ns|
    unit.puts "#{ns.init}"
 }
 
-unit.puts "}\n"
+unit.puts %@
+} /* Init_#{bindings} */
+
+} /* extern C */
+@
+
+header.puts %@
+} /* extern C */
+@
