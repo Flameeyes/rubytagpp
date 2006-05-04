@@ -47,6 +47,6 @@ class Namespace
          ret << cls.init
       }
 
-      ret << "\n"
+      ret
    end
 end
