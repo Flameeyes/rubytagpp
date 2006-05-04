@@ -140,7 +140,7 @@ class ClassMethod
       end
 
       ret << %@
-   return cxx2ruby(tmp, true);
+   return cxx2ruby(tmp, self);
 }
 @
    end
