@@ -89,7 +89,7 @@ class ClassMethod
    end
 
    def init
-      ret = "rb_define_method(c#{@cls.varname}, \"#{@bindname}\", RUBY_METHOD_FUNC(#{varname}), #{@params.length});\n"
+      "rb_define_method(c#{@cls.varname}, \"#{@bindname}\", RUBY_METHOD_FUNC(#{varname}), #{@params.length});\n"
    end
 end
 
