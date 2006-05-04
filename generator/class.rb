@@ -91,17 +91,17 @@ static void #{varname}_free(void *p) {
       ret << %@
 
 #{@ns.name}::#{@name}* ruby2#{varname}(VALUE rval) {
-  T#{ptrmap}::iterator it = #{ptrmap}.find(rval);
+   Check_Type(rval, T_OBJECT);
+   T#{ptrmap}::iterator it = #{ptrmap}.find(rval);
 
-  if ( it == #{ptrmap}.end() ) {
-     rb_raise(rb_eException, "#{@ns.name}::#{@name} instance not found in ptrMap");
-     return NULL;
-  }
+   if ( it == #{ptrmap}.end() ) {
+      rb_raise(rb_eRuntimeError, "Unable to find #{@ns.name}::#{name} instance for value %x (type %d)\\n", rval, TYPE(rval));
+      return NULL;
+   }
 
-  return dynamic_cast<#{@ns.name}::#{@name}*>((*it).second);
+   return dynamic_cast<#{@ns.name}::#{@name}*>((*it).second);
 }
 
-/* VALUE #{varname}2ruby(#{@ns.name}::#{@name}* instance); */
 VALUE cxx2ruby(#{@ns.name}::#{@name}* instance) {
   T#{ptrmap}::iterator it, eend = #{ptrmap}.end();
 
@@ -111,8 +111,9 @@ VALUE cxx2ruby(#{@ns.name}::#{@name}* instance) {
   if ( it != #{ptrmap}.end() )
      return (*it).first;
   else {
-     VALUE rval = Data_Wrap_Struct(c#{varname}, 0, #{function_free}, instance);
-     #{ptrmap}[rval] = instance;
+     VALUE rval = Data_Wrap_Struct(c#{varname}, 0, #{function_free}, (void*)instance);
+     #{ptrmap}[rval+5*sizeof(void*)] = instance;
+     fprintf(stderr, "Wrapping instance %p in value %x (type %d)\\n", instance, rval+5*sizeof(void*), TYPE(rval+5*sizeof(void*)));
      return rval;
   }
 }
