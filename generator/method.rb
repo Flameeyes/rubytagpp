@@ -94,7 +94,7 @@ class ClassMethod
             {
             @
 
-         @vararg.times { |n|
+         @params.each_index { |n|
             if @params[n].optional
                if @return and @return != "void"
                   ret << "case #{n}: return cxx2ruby(tmp->#{@name}(#{params_conversion(n)}));\n"
