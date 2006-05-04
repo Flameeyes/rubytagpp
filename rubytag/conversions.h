@@ -1,10 +1,15 @@
 /*
- * kate: encoding UTF-8; remove-trailing-space on; replace-trailing-space-save on; space-indent on; indent-width 3;
+ * kate: encoding UTF-8; remove-trailing-space on; replace-trailing-space-save on; space-indent on; indent-width 4;
  */
 
 static inline VALUE cxx2ruby(uint val)
 {
     return INT2FIX(val);
+}
+
+static inline VALUE cxx2ruby(const char *val)
+{
+    return rb_str_new2(val);
 }
 
 static inline uint ruby2uint(VALUE rval)
@@ -15,6 +20,12 @@ static inline uint ruby2uint(VALUE rval)
 static inline bool ruby2bool(VALUE rval)
 {
     return (bool)(NUM2INT(rval));
+}
+
+static inline char *ruby2charPtr(VALUE rval)
+{
+    Check_Type(rval, T_STRING);
+    return StringValuePtr(rval);
 }
 
 /* Taglib-specific */
