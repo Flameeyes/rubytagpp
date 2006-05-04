@@ -45,7 +45,8 @@ class Class
    end
 
    def header
-      ret = "extern VALUE c#{varname};\n"
+      ret = "extern VALUE c#{varname};\n" \
+         "VALUE cxx2ruby(#{@ns.name}::#{@name}* instance, bool allocated = false);\n"
 
       unless @parent
          ret << \
@@ -91,7 +92,6 @@ static void #{varname}_free(void *p) {
       ret << %@
 
 #{@ns.name}::#{@name}* ruby2#{varname}(VALUE rval) {
-   Check_Type(rval, T_OBJECT);
    T#{ptrmap}::iterator it = #{ptrmap}.find(rval);
 
    if ( it == #{ptrmap}.end() ) {
@@ -102,7 +102,7 @@ static void #{varname}_free(void *p) {
    return dynamic_cast<#{@ns.name}::#{@name}*>((*it).second);
 }
 
-VALUE cxx2ruby(#{@ns.name}::#{@name}* instance) {
+VALUE cxx2ruby(#{@ns.name}::#{@name}* instance, bool allocated) {
   T#{ptrmap}::iterator it, eend = #{ptrmap}.end();
 
   for(it = #{ptrmap}.begin(); it != eend; it++)
@@ -111,9 +111,10 @@ VALUE cxx2ruby(#{@ns.name}::#{@name}* instance) {
   if ( it != #{ptrmap}.end() )
      return (*it).first;
   else {
+     int offset = allocated ? 5*sizeof(void*) : 0;
      VALUE rval = Data_Wrap_Struct(c#{varname}, 0, #{function_free}, (void*)instance);
-     #{ptrmap}[rval+5*sizeof(void*)] = instance;
-     fprintf(stderr, "Wrapping instance %p in value %x (type %d)\\n", instance, rval+5*sizeof(void*), TYPE(rval+5*sizeof(void*)));
+     #{ptrmap}[rval+offset] = instance;
+     fprintf(stderr, "Wrapping instance %p in value %x (type %d)\\n", instance, rval+offset, TYPE(rval+offset));
      return rval;
   }
 }

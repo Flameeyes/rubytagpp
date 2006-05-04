@@ -83,7 +83,7 @@ class ClassMethod
 #{binding_prototype} {
    #{@cls.ns.name}::#{@cls.name}* tmp = new #{@cls.ns.name}::#{@cls.name}(#{params_conversion});
 
-   return cxx2ruby(tmp);
+   return cxx2ruby(tmp, true);
 }
 @
    end
