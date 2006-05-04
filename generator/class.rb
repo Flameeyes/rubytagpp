@@ -101,7 +101,8 @@ static void #{varname}_free(void *p) {
   return dynamic_cast<#{@ns.name}::#{@name}*>((*it).second);
 }
 
-VALUE #{varname}2ruby(#{@ns.name}::#{@name}* instance) {
+/* VALUE #{varname}2ruby(#{@ns.name}::#{@name}* instance); */
+VALUE cxx2ruby(#{@ns.name}::#{@name}* instance) {
   T#{ptrmap}::iterator it, eend = #{ptrmap}.end();
 
   for(it = #{ptrmap}.begin(); it != eend; it++)
