@@ -107,19 +107,14 @@ VALUE cxx2ruby(#{@ns.name}::#{@name}* instance, bool allocated) {
   for(it = #{ptrmap}.begin(); it != eend; it++)
      if ( (*it).second == (#{@ns.name}::#{@name}*)instance ) break;
 
-   if ( allocated )
-   {
-      if ( it != #{ptrmap}.end() )
-         return (*it).first;
-      else {
-         int offset = allocated ? 5*sizeof(void*) : 0;
-         VALUE rval = Data_Wrap_Struct(c#{varname}, 0, #{function_free}, (void*)instance);
-         #{ptrmap}[rval+offset] = instance;
-         fprintf(stderr, "Wrapping instance %p in value %x (type %d)\\n", instance, rval+offset, TYPE(rval+offset));
-         return rval;
-      }
-   } else {
-      return Data_Wrap_Struct(c#{varname}, 0, 0, (void*)instance);
+   if ( it != #{ptrmap}.end() )
+      return (*it).first;
+   else {
+      int offset = allocated ? 5*sizeof(void*) : 0;
+      VALUE rval = Data_Wrap_Struct(c#{varname}, 0, allocated ? #{function_free} : 0, (void*)instance);
+      #{ptrmap}[rval+offset] = instance;
+      fprintf(stderr, "Wrapping instance %p in value %x (type %d)\\n", instance, rval+offset, TYPE(rval+offset));
+      return rval;
    }
 }
 @
