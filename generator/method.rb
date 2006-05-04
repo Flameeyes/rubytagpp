@@ -26,9 +26,12 @@ class ClassMethod
          @return = "void"
       end
 
+      @vararg = false
+
       if content and content["params"]
          content["params"].each { |p|
-            @params << Parameter.new(p["type"], p["name"])
+            @params << Parameter.new(p["type"], p["name"], p["optional"] == "yes")
+            @vararg ||= p["optional"] == "yes"
          }
       end
    end
@@ -38,20 +41,30 @@ class ClassMethod
    end
 
    def binding_prototype
-      prototype = "VALUE #{varname} ( VALUE self"
+      unless @vararg
+         prototype = "VALUE #{varname} ( VALUE self"
 
-      @params.each { |p|
-         prototype << ", VALUE #{p.name}"
-      }
+         @params.each { |p|
+            prototype << ", VALUE #{p.name}"
+         }
 
-      prototype << " )"
+         prototype << " )"
+      else
+         prototype = "VALUE #{varname} ( int argc, VALUE *argv, VALUE self )"
+      end
    end
 
-   def params_conversion
+   def params_conversion(nparms = nil)
       ret = ""
-      @params.each { |p|
-         ret << " ruby2#{p.type.sub("*", "Ptr").gsub("::", "_")}(#{p.name}),"
-      } if @params
+      unless nparms
+         @params.each { |p|
+            ret << " ruby2#{p.type.sub("*", "Ptr").gsub("::", "_")}(#{p.name}),"
+         } if @params
+      else
+         @params.slice(0, nparms).each_index { |p|
+            ret << " ruby2#{@params[p].type.sub("*", "Ptr").gsub("::", "_")}(argv[#{p}]),"
+         } if @params
+      end
 
       ret.chomp!(",")
    end
@@ -69,35 +82,80 @@ class ClassMethod
 
   @
 
-      if @return and @return != "void"
-         ret << "return cxx2ruby(tmp->#{@name}(#{params_conversion}));\n"
+      unless @vararg
+         if @return and @return != "void"
+            ret << "return cxx2ruby(tmp->#{@name}(#{params_conversion}));\n"
+         else
+            ret << "tmp->#{@name}(#{params_conversion}); return Qnil;\n"
+         end
       else
-         ret << "tmp->#{@name}(#{params_conversion}); return Qnil;\n"
+         ret << %@
+            switch(argc)
+            {
+            @
+
+         @vararg.times { |n|
+            if @params[n].optional
+               if @return and @return != "void"
+                  ret << "case #{n}: return cxx2ruby(tmp->#{@name}(#{params_conversion(n)}));\n"
+               else
+                  ret << "case #{n}: tmp->#{@name}(#{params_conversion(n)}); return Qnil;\n"
+               end
+            end
+         }
+
+         ret << %@
+               default: rb_raise(rb_eArgError, "Mantatory parameters missing"); return Qnil;
+            } // switch
+            @
       end
 
       ret << "}\n"
    end
 
    def constructor_stub
-      %@
+      ret = %@
 #{binding_prototype} {
-   #{@cls.ns.name}::#{@cls.name}* tmp = new #{@cls.ns.name}::#{@cls.name}(#{params_conversion});
+   #{@cls.ns.name}::#{@cls.name}* tmp;
+@
+      unless @vararg
+         ret << "tmp = new #{@cls.ns.name}::#{@cls.name}(#{params_conversion});"
+      else
+         ret << %@
+            switch(argc)
+            {
+@
 
+         @params.each_index { |n|
+            if @params[n].optional
+               ret << "case #{n}: tmp = new #{@cls.ns.name}::#{@cls.name}(#{params_conversion(n)}); break;\n"
+            end
+         }
+
+         ret << %@
+               case #{@params.size}: tmp = new #{@cls.ns.name}::#{@cls.name}(#{params_conversion(@params.size)}); break;
+               default: rb_raise(rb_eArgError, "Mandatory parameters missing (passed %d)\\n", argc); return Qnil;
+            } // switch
+            @
+      end
+
+      ret << %@
    return cxx2ruby(tmp, true);
 }
 @
    end
 
    def init
-      "rb_define_method(c#{@cls.varname}, \"#{@bindname}\", RUBY_METHOD_FUNC(#{varname}), #{@params.length});\n"
+      "rb_define_method(c#{@cls.varname}, \"#{@bindname}\", RUBY_METHOD_FUNC(#{varname}), #{@vararg ? "-1" : @params.length});\n"
    end
 end
 
 class Parameter
-   attr_reader :type, :name
+   attr_reader :type, :name, :optional
 
-   def initialize(type, name)
+   def initialize(type, name, optional)
       @type = type
       @name = name
+      @optional = optional
    end
 end

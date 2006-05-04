@@ -10,8 +10,8 @@ class Class
       @parent = content["parent"]
 
       if content["methods"]
-         content["methods"].each_pair { |mtname, mtcont|
-            @methods << ClassMethod.new(self, mtname, mtcont)
+         content["methods"].each { |method|
+            @methods << ClassMethod.new(self, method["name"], method)
          }
       end
 
@@ -21,7 +21,7 @@ class Class
             getmethod = ClassMethod.new(self, atcont["funcget"], nil, atname)
 
             getmethod.return = atcont["type"]
-            setmethod.params << Parameter.new(atcont["type"], "value")
+            setmethod.params << Parameter.new(atcont["type"], "value", false)
 
             @methods << setmethod
             @methods << getmethod

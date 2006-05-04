@@ -20,15 +20,23 @@
   namespaces: [
     { name: "TagLib",
       classes: {
+        AudioProperties: {
+          methods: [
+            { name: "length", return: "int" },
+            { name: "bitrate", return: "int" },
+            { name: "sampleRate", return: "int" },
+            { name: "channels", return: "int" }
+          ]
+        },
         File: {
-          methods: {
-            "name": { return: "char*", params: {} },
-            "tag": { return: "Tag*", params: {} },
-            "save": { return: "bool", params: {} },
-            "readOnly": { return: "bool", params: {} },
-            "isOpen": { return: "bool", params: {} },
-            "isValid": { return: "bool", params: {} }
-          }
+          methods: [
+            { name: "name", return: "char*" },
+            { name: "tag", return: "Tag*" },
+            { name: "save", return: "bool" },
+            { name: "readOnly", return: "bool" },
+            { name: "isOpen", return: "bool" },
+            { name: "isValid", return: "bool" }
+          ]
         },
         Tag: {
           attributes: {
@@ -40,9 +48,9 @@
             "year": { funcget: "year", funcset: "setYear", type: "uint" },
             "year": { funcget: "track", funcset: "setTrack", type: "uint" }
           },
-          methods: {
-            "isEmpty": { return "bool", params: {} }
-          }
+          methods: [
+            { name: "isEmpty", return "bool" }
+          ]
         }
       }
     },
@@ -50,14 +58,15 @@
       classes: {
         File: {
           parent: "TagLib::File",
-          methods: {
-            "File": { params: [
+          methods: [
+            { name: "File",
+              variant: "1", params: [
                 {name: "file", type: "char*"},
-                {name: "readProperties", type: "bool"}
-                # TODO TODO TODO
-                # {name: "propertiesStyle", type: "Properties::ReadStyle" }
-              ] }
-          }
+                {name: "readProperties", type: "bool", optional: "yes"},
+                {name: "propertiesStyle", type: "TagLib::AudioProperties::ReadStyle", optional: "yes" }
+              ]
+            }
+          ]
         }
       }
     },
@@ -86,13 +95,15 @@
       classes: {
         XiphComment: {
           parent: "TagLib::Tag",
-          methods: {
-            "addField": { return: "void", params: [
+          methods: [
+            { name: "addField",
+              return: "void", params: [
                 {name: "key", type: "String"},
                 {name: "value", type: "String"},
                 {name: "replace", type: "bool"}
-              ] }
-          }
+              ]
+            }
+          ]
         }
       }
     }
