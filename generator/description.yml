@@ -35,7 +35,8 @@
             { name: "save", return: "bool" },
             { name: "readOnly", return: "bool" },
             { name: "isOpen", return: "bool" },
-            { name: "isValid", return: "bool" }
+            { name: "isValid", return: "bool" },
+            { name: "audioProperties", return: "TagLib::AudioProperties" }
           ]
         },
         { name: "Tag",
