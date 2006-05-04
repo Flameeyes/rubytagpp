@@ -113,6 +113,7 @@ VALUE cxx2ruby(#{@ns.name}::#{@name}* instance, bool allocated) {
       int offset = allocated ? 5*sizeof(void*) : 0;
       VALUE rval = Data_Wrap_Struct(c#{varname}, 0, allocated ? #{function_free} : 0, (void*)instance);
       #{ptrmap}[rval+offset] = instance;
+      #{ptrmap}[rval+offset*2] = instance;
       fprintf(stderr, "Wrapping instance %p in value %x (type %d)\\n", instance, rval+offset, TYPE(rval+offset));
       return rval;
    }
