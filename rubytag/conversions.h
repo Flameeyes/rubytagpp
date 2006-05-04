@@ -12,6 +12,11 @@ static inline VALUE cxx2ruby(const char *val)
     return rb_str_new2(val);
 }
 
+static inline VALUE cxx2ruby(bool val)
+{
+    return val ? Qtrue : Qfalse;
+}
+
 static inline uint ruby2uint(VALUE rval)
 {
     return NUM2INT(rval);
