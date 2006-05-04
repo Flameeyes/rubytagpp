@@ -46,7 +46,7 @@
             "comment": { funcget: "comment", funcset: "setComment", type: "String" },
             "genre": { funcget: "genre", funcset: "setGenre", type: "String" },
             "year": { funcget: "year", funcset: "setYear", type: "uint" },
-            "year": { funcget: "track", funcset: "setTrack", type: "uint" }
+            "track": { funcget: "track", funcset: "setTrack", type: "uint" }
           },
           methods: [
             { name: "isEmpty", return "bool" }
