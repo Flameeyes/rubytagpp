@@ -117,6 +117,7 @@ class ClassMethod
       ret = %@
 #{binding_prototype} {
    #{@cls.ns.name}::#{@cls.name}* tmp;
+   Data_Get_Struct(self, #{@cls.ns.name}::#{@cls.name}, tmp);
 @
       unless @vararg
          ret << "tmp = new #{@cls.ns.name}::#{@cls.name}(#{params_conversion});"
@@ -140,7 +141,10 @@ class ClassMethod
       end
 
       ret << %@
-   return cxx2ruby(tmp, self);
+
+   DATA_PTR(self) = tmp;
+   #{@cls.ptrmap}[self] = tmp;
+   return self;
 }
 @
    end

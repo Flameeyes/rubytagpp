@@ -45,7 +45,7 @@ class Class
 
    def header
       ret = "extern VALUE c#{varname};\n" \
-         "VALUE cxx2ruby(#{@ns.name}::#{@name}* instance, VALUE self = Qnil);\n"
+         "VALUE cxx2ruby(#{@ns.name}::#{@name}* instance);\n"
 
       unless @parent
          ret << \
@@ -91,6 +91,11 @@ static void #{varname}_free(void *p) {
       ret << %@
 
 #{@ns.name}::#{@name}* ruby2#{varname}(VALUE rval) {
+   #{@ns.name}::#{@name}* ptr;
+   Data_Get_Struct(rval, #{@ns.name}::#{@name}, ptr);
+
+   if ( ptr ) return dynamic_cast<#{@ns.name}::#{@name}*>(ptr);
+
    T#{ptrmap}::iterator it = #{ptrmap}.find(rval);
 
    if ( it == #{ptrmap}.end() ) {
@@ -101,7 +106,7 @@ static void #{varname}_free(void *p) {
    return dynamic_cast<#{@ns.name}::#{@name}*>((*it).second);
 }
 
-VALUE cxx2ruby(#{@ns.name}::#{@name}* instance, VALUE self) {
+VALUE cxx2ruby(#{@ns.name}::#{@name}* instance) {
   T#{ptrmap}::iterator it, eend = #{ptrmap}.end();
 
   for(it = #{ptrmap}.begin(); it != eend; it++)
@@ -110,13 +115,17 @@ VALUE cxx2ruby(#{@ns.name}::#{@name}* instance, VALUE self) {
    if ( it != #{ptrmap}.end() )
       return (*it).first;
    else {
-      VALUE rval = Data_Wrap_Struct(c#{varname}, 0, (self != Qnil) ? #{function_free} : 0, (void*)instance);
+      VALUE rval = Data_Wrap_Struct(c#{varname}, 0, 0, (void*)instance);
       #{ptrmap}[rval] = instance;
-      if ( self != Qnil ) #{ptrmap}[self] = instance;
       // fprintf(stderr, "Wrapping instance %p in value %x (type %d)\\n", instance, rval, TYPE(rval));
       return rval;
    }
 }
+
+static VALUE #{varname}_alloc(VALUE self) {
+   return Data_Wrap_Struct(self, 0, #{function_free}, 0);
+}
+
 @
 
       @methods.each { |method| ret << method.binding_stub }
@@ -132,6 +141,7 @@ VALUE cxx2ruby(#{@ns.name}::#{@name}* instance, VALUE self) {
    def init
       %@
 c#{varname} = rb_define_class_under(#{@ns.varname}, \"#{@name.split("::").last}\", #{parentvar});
+rb_define_alloc_func(c#{varname}, #{varname}_alloc);
 #{methods_init}
       @
    end
