@@ -67,6 +67,18 @@
                 {name: "readProperties", type: "bool", optional: "yes"},
                 {name: "propertiesStyle", type: "TagLib::AudioProperties::ReadStyle", optional: "yes" }
               ]
+            },
+            { name: "ID3v2Tag",
+              return: "TagLib::ID3v2::Tag",
+              params: [ {name: "create", type: "bool", optional: "yes"} ]
+            },
+            { name: "ID3v1Tag",
+              return: "TagLib::ID3v1::Tag",
+              params: [ {name: "create", type: "bool", optional: "yes"} ]
+            },
+            { name: "xiphComment",
+              return: "TagLib::Ogg::XiphComment",
+              params: [ {name: "create", type: "bool", optional: "yes"} ]
             }
           ]
         }
@@ -138,6 +150,22 @@
               ]
             },
             { name: "audioProperties", return: "TagLib::Vorbis::Properties" }
+          ]
+        }
+      ]
+    },
+    { name: "TagLib::Ogg::FLAC",
+      classes: [
+        { name: "File",
+          parent: "TagLib::Ogg::File",
+          methods: [
+            { name: "File",
+              params: [
+                {name: "file", type: "char*"},
+                {name: "readProperties", type: "bool", optional: "yes"},
+                {name: "propertiesStyle", type: "TagLib::AudioProperties::ReadStyle", optional: "yes" }
+              ]
+            }
           ]
         }
       ]
