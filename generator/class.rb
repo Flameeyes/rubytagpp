@@ -113,7 +113,7 @@ VALUE cxx2ruby(#{@ns.name}::#{@name}* instance, VALUE self) {
       VALUE rval = Data_Wrap_Struct(c#{varname}, 0, (self != Qnil) ? #{function_free} : 0, (void*)instance);
       #{ptrmap}[rval] = instance;
       if ( self != Qnil ) #{ptrmap}[self] = instance;
-      fprintf(stderr, "Wrapping instance %p in value %x (type %d)\\n", instance, rval, TYPE(rval));
+      // fprintf(stderr, "Wrapping instance %p in value %x (type %d)\\n", instance, rval, TYPE(rval));
       return rval;
    }
 }
