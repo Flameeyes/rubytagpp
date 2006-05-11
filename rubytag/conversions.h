@@ -45,6 +45,12 @@ static inline char *ruby2charPtr(VALUE rval)
 
 /* Taglib-specific */
 
+static inline VALUE cxx2ruby(TagLib::ByteVector vector)
+{
+    fprintf(stderr, "Converting vector of %d bytes\n", vector.size());
+    return rb_str_new(vector.data(), vector.size());
+}
+
 static inline VALUE cxx2ruby(TagLib::String str)
 {
     return rb_str_new2(str.toCString());
