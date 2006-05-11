@@ -83,7 +83,9 @@
             },
             { name: "tag", return: "TagLib::Tag" },
             { name: "audioProperties", return: "TagLib::AudioProperties" },
-            { name: "file", return: "TagLib::File" }
+            { name: "file", return: "TagLib::File" },
+            { name: "isNull", return: "bool" },
+            { name: "save", return: "bool" }
           ]
         }
       ]
