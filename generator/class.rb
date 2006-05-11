@@ -18,7 +18,7 @@
 # kate: encoding UTF-8; remove-trailing-space on; replace-trailing-space-save on; space-indent on; indent-width 3;
 
 class Class
-   attr_reader :ns, :name
+   attr_reader :ns, :name, :children
    @@classes = Hash.new
 
    def initialize(ns, name, content)
@@ -27,6 +27,9 @@ class Class
       @@classes["#{@ns.name}::#{@name}"] = self
       @methods = Array.new
       @parent = content["parent"] ? @@classes[content["parent"]] : nil
+      @parent.children << self if @parent
+
+      @children = Array.new
 
       if content["methods"]
          content["methods"].each { |method|
@@ -86,6 +89,24 @@ class Class
       @parent ? "c#{@parent.varname}" : "rb_cObject"
    end
 
+   def test_children
+      return unless @children
+
+      ret = ""
+
+      @children.each { |klass|
+         ret << %@
+if ( dynamic_cast<#{klass.ns.name}::#{klass.name}*>(instance) != NULL )
+{
+   klass = c#{klass.varname};
+   #{klass.test_children}
+}
+@
+      }
+
+      ret
+   end
+
    def unit
       ret = "VALUE c#{varname};\n"
 
@@ -132,7 +153,11 @@ VALUE cxx2ruby(#{@ns.name}::#{@name}* instance) {
    if ( it != #{ptrmap}.end() )
       return (*it).first;
    else {
-      VALUE rval = Data_Wrap_Struct(c#{varname}, 0, 0, (void*)instance);
+      VALUE klass = c#{varname};
+
+#{test_children}
+
+      VALUE rval = Data_Wrap_Struct(klass, 0, 0, (void*)instance);
       #{ptrmap}[rval] = instance;
       // fprintf(stderr, "Wrapping instance %p in value %x (type %d)\\n", instance, rval, TYPE(rval));
       return rval;
