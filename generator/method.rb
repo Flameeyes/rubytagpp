@@ -176,6 +176,9 @@ class ClassMethod
          }
       end
 
+      nocamel_bindname = @bindname.gsub(/[A-Z]/) { |letter| "_#{letter.downcase}" }
+      res << "rb_define_method(c#{@cls.varname}, \"#{nocamel_bindname}\", RUBY_METHOD_FUNC(#{varname}), #{@vararg ? "-1" : @params.length});\n"
+
       res
    end
 end
