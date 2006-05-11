@@ -60,3 +60,16 @@ static inline TagLib::AudioProperties::ReadStyle ruby2TagLib_AudioProperties_Rea
 {
     return (TagLib::AudioProperties::ReadStyle)ruby2int(rval);
 }
+
+template<typename T> static VALUE cxx2ruby(TagLib::List<T> list)
+{
+    VALUE rubyarray = rb_ary_new2(list.size());
+    typename TagLib::List<T>::Iterator it;
+
+    for(it = list.begin() ; it != list.end(); it++ )
+    {
+        rb_ary_push(rubyarray, cxx2ruby(*it));
+    }
+
+    return rubyarray;
+}

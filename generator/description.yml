@@ -34,6 +34,7 @@
     "<taglib/vorbisfile.h>",
     "<taglib/vorbisproperties.h>",
     "<taglib/fileref.h>",
+    "<tlist.h>",
     "\"conversions.h\""
   ],
   namespaces: [
