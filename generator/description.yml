@@ -36,7 +36,12 @@
     "<taglib/fileref.h>",
     "<tlist.h>",
     "<id3v2frame.h>",
-    "<textidentificationframe.h>"
+    "<textidentificationframe.h>",
+    "<attachedpictureframe.h>",
+    "<commentsframe.h>",
+    "<relativevolumeframe.h>",
+    "<uniquefileidentifierframe.h>",
+    "<unknownframe.h>"
   ],
   namespaces: [
     { name: "TagLib",
@@ -134,9 +139,28 @@
           ]
         },
         { name: "TextIdentificationFrame",
+          parent: "TagLib::ID3v2::Frame",
           methods: [
             { name: "fieldList", return: "StringList" }
           ]
+        },
+        { name: "UserTextIdentificationFrame",
+          parent: "TagLib::ID3v2::TextIdentificationFrame"
+        },
+        { name: "UniqueFileIdentifierFrame",
+          parent: "TagLib::ID3v2::Frame"
+        },
+        { name: "AttachedPictureFrame",
+          parent: "TagLib::ID3v2::Frame"
+        },
+        { name: "CommentsFrame",
+          parent: "TagLib::ID3v2::Frame"
+        },
+        { name: "RelativeVolumeFrame",
+          parent: "TagLib::ID3v2::Frame"
+        },
+        { name: "UnknownFrame",
+          parent: "TagLib::ID3v2::Frame"
         },
         { name: "Tag",
           parent: "TagLib::Tag",
