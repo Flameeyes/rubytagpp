@@ -35,6 +35,8 @@
     "<taglib/vorbisproperties.h>",
     "<taglib/fileref.h>",
     "<tlist.h>",
+    "<id3v2frame.h>",
+    "<textidentificationframe.h>",
     "\"conversions.h\""
   ],
   namespaces: [
@@ -121,8 +123,28 @@
     },
     { name: "TagLib::ID3v2",
       classes: [
+        { name: "Frame",
+          methods: [
+            { name: "size", return: "uint" },
+            { name: "setText", aliases: [ "text=" ],
+              params: [ {name: "text", type: "String"} ]
+            },
+            { name: "toString",
+              aliases: [ "text", "to_s" ]
+            }
+          ]
+        },
+        { name: "TextIdentificationFrame",
+          methods: [
+            { name: "fieldList", return: "StringList" }
+          ]
+        },
         { name: "Tag",
-          parent: "TagLib::Tag"
+          parent: "TagLib::Tag",
+          methods: [
+            { name: "frameList", return: "FrameList" },
+            { name: "frameListMap", return: "FrameListMap" }
+          ]
         }
       ]
     },
@@ -154,7 +176,8 @@
                 {name: "value", type: "String"},
                 {name: "replace", type: "bool"}
               ]
-            }
+            },
+            { name: "fieldListMap", return: "FieldListMap" }
           ]
         }
       ]
@@ -229,6 +252,18 @@
                 {name: "tags", type: "int", optional: "yes"},
                 {name: "freeMemory", type: "bool", optional: "yes"}
               ]
+            },
+            { name: "ID3v2Tag",
+              return: "TagLib::ID3v2::Tag",
+              params: [ {name: "create", type: "bool", optional: "yes"} ]
+            },
+            { name: "ID3v1Tag",
+              return: "TagLib::ID3v1::Tag",
+              params: [ {name: "create", type: "bool", optional: "yes"} ]
+            },
+            { name: "APETag",
+              return: "TagLib::APE::Tag",
+              params: [ {name: "create", type: "bool", optional: "yes"} ]
             }
           ]
         }
