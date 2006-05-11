@@ -44,6 +44,7 @@ description["includes"].each do |libincl|
 end
 
 unit.puts %@#include "#{bindings}.h"
+#include "conversions.h"
 @
 
 namespaces.each { |ns|

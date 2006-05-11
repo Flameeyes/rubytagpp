@@ -36,8 +36,7 @@
     "<taglib/fileref.h>",
     "<tlist.h>",
     "<id3v2frame.h>",
-    "<textidentificationframe.h>",
-    "\"conversions.h\""
+    "<textidentificationframe.h>"
   ],
   namespaces: [
     { name: "TagLib",
