@@ -10,3 +10,4 @@ CMakeTmp
 rubytag/rubytagpp.h
 rubytag/rubytagpp.cpp
 simpletest.rb
+install_manifest.txt
