@@ -66,10 +66,23 @@ template<typename T> static VALUE cxx2ruby(TagLib::List<T> list)
     VALUE rubyarray = rb_ary_new2(list.size());
     typename TagLib::List<T>::Iterator it;
 
-    for(it = list.begin() ; it != list.end(); it++ )
+    for(it = list.begin(); it != list.end(); it++ )
     {
         rb_ary_push(rubyarray, cxx2ruby(*it));
     }
 
     return rubyarray;
+}
+
+template<typename Key, typename T> static VALUE cxx2ruby(TagLib::Map<Key, T> map)
+{
+    VALUE rubyhash = rb_hash_new();
+    typename TagLib::Map<Key, T>::Iterator it;
+
+    for(it = map.begin(); it != map.end(); it++)
+    {
+        rb_hash_aset(rubyhash, cxx2ruby((*it).first), cxx2ruby((*it).second));
+    }
+
+    return rubyhash;
 }
