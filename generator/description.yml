@@ -183,6 +183,7 @@
               ]
             },
             { name: "save",
+              return: "bool",
               params: [
                 {name: "tags", type: "int", optional: "yes"},
                 {name: "stripOthers", type: "bool", optional: "yes"}
