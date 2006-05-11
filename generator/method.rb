@@ -45,6 +45,8 @@ class ClassMethod
 
       @vararg = false
 
+      @aliases = content["aliases"] if content
+
       if content and content["params"]
          content["params"].each { |p|
             @params << Parameter.new(p["type"], p["name"], p["optional"] == "yes")
@@ -167,7 +169,14 @@ class ClassMethod
    end
 
    def init
-      "rb_define_method(c#{@cls.varname}, \"#{@bindname}\", RUBY_METHOD_FUNC(#{varname}), #{@vararg ? "-1" : @params.length});\n"
+      res = "rb_define_method(c#{@cls.varname}, \"#{@bindname}\", RUBY_METHOD_FUNC(#{varname}), #{@vararg ? "-1" : @params.length});\n"
+      if @aliases
+         @aliases.each { |meth_alias|
+            res << "rb_define_method(c#{@cls.varname}, \"#{meth_alias}\", RUBY_METHOD_FUNC(#{varname}), #{@vararg ? "-1" : @params.length});\n"
+         }
+      end
+
+      res
    end
 end
 
