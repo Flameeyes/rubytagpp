@@ -33,6 +33,7 @@
     "<taglib/oggflacfile.h>",
     "<taglib/vorbisfile.h>",
     "<taglib/vorbisproperties.h>",
+    "<taglib/fileref.h>",
     "\"conversions.h\""
   ],
   namespaces: [
@@ -69,6 +70,20 @@
           },
           methods: [
             { name: "isEmpty", return "bool" }
+          ]
+        },
+        { name: "FileRef",
+          methods: [
+            { name: "FileRef",
+              params: [
+                {name: "fileName", type: "char*"},
+                {name: "readProperties", type: "bool", optional: "yes"},
+                {name: "propertiesStyle", type: "TagLib::AudioProperties::ReadStyle", optional: "yes" }
+              ]
+            },
+            { name: "tag", return: "TagLib::Tag" },
+            { name: "audioProperties", return: "TagLib::AudioProperties" },
+            { name: "file", return: "TagLib::File" }
           ]
         }
       ]
