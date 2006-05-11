@@ -162,11 +162,25 @@
         { name: "UnknownFrame",
           parent: "TagLib::ID3v2::Frame"
         },
+        { name: "Header",
+          methods: [
+            { name: "majorVersion", return: "uint" },
+            { name: "revisionNumber", return: "uint" },
+            { name: "unsynchronisation", return: "bool" },
+            { name: "extendedHeader", return: "bool" },
+            { name: "experimentalIndicator", return: "bool" },
+            { name: "footerPresent", return: "bool" },
+            { name: "tagSize", return: "uint" },
+            { name: "completeTagSize", return: "uint" },
+            { name: "setTagSize", params: [ {name: "s", type: "uint"} ] }
+          ]
+        },
         { name: "Tag",
           parent: "TagLib::Tag",
           methods: [
             { name: "frameList", return: "FrameList" },
-            { name: "frameListMap", return: "FrameListMap" }
+            { name: "frameListMap", return: "FrameListMap" },
+            { name: "header", return: "Header*" }
           ]
         }
       ]
