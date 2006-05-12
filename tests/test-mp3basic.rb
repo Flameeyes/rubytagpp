@@ -1,4 +1,4 @@
-# Test n. 3, simple test of getting data out of an mp3 file
+# Simple test of getting data out of an mp3 file
 
 require "rubytagpp"
 require "tempfile"

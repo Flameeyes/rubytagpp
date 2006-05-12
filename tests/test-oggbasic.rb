@@ -1,4 +1,4 @@
-# Test n. 4, simple test of getting data out of an ogg file
+# Simple test of getting data out of an ogg file
 
 require "rubytagpp"
 require "tempfile"

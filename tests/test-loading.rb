@@ -1,4 +1,5 @@
-# Simple test n. 1: load rubytagpp
+# First test: load rubytagpp
+# If this fails, RubyTag++ wasn't correctly compiled.
 
 require 'rubytagpp'
 
