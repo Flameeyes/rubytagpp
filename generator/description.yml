@@ -317,6 +317,14 @@
                 {name: "readProperties", type: "bool", optional: "yes"},
                 {name: "propertiesStyle", type: "TagLib::AudioProperties::ReadStyle", optional: "yes" }
               ]
+            },
+            { name: "ID3v1Tag",
+              return: "TagLib::ID3v1::Tag",
+              params: [ {name: "create", type: "bool", optional: "yes"} ]
+            },
+            { name: "APETag",
+              return: "TagLib::APE::Tag",
+              params: [ {name: "create", type: "bool", optional: "yes"} ]
             }
           ]
         }

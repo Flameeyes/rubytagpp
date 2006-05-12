@@ -19,5 +19,7 @@ tmpwav.unlink
 file = TagLib::MPC::File.new(@tmp.path)
 doexit(-3) unless file.open?
 doexit(-5) if file.tag and not ( file.tag.is_a?(TagLib::APE::Tag) or file.tag.is_a?(TagLib::ID3v1::Tag) )
+doexit(-6) if file.APETag and not file.APETag.is_a?(TagLib::APE::Tag)
+doexit(-7) if file.ID3v1Tag and not file.ID3v1Tag.is_a?(TagLib::ID3v1::Tag)
 
 doexit
