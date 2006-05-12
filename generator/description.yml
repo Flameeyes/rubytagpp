@@ -309,7 +309,16 @@
     { name: "TagLib::MPC",
       classes: [
         { name: "File",
-          parent: "TagLib::File"
+          parent: "TagLib::File",
+          methods: [
+            { name: "File",
+              params: [
+                {name: "file", type: "char*"},
+                {name: "readProperties", type: "bool", optional: "yes"},
+                {name: "propertiesStyle", type: "TagLib::AudioProperties::ReadStyle", optional: "yes" }
+              ]
+            }
+          ]
         }
       ]
     }
