@@ -1,4 +1,4 @@
-# Test n. 4, simple test of getting data out of an ogg file with the raw fields
+# Test n. 6, simple test of getting data out of an ogg file with the raw fields
 # list
 
 require "rubytagpp"
