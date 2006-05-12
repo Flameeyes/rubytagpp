@@ -3,21 +3,12 @@
 require "rubytagpp"
 require "custom-tmpfile"
 
-TEST_TITLE = "This is a test"
-TEST_ALBUM = "Run your little test"
-TEST_ARTIST = "The Testers"
-TEST_TRACK = 1
-
-# First of all, create a temporary file
-@tmp = Tempfile.new("rubytag-test-mp3basic.mp3")
-@tmp.close
-
 def doexit(ret = 0)
     @tmp.unlink
     exit ret
 end
 
-# Convert the compressed wave in mpc and set test tags
+# Convert the compressed wave in mpc
 @tmp = CustomTempfile.new("rubytag-test-mpcbasic", "mpc")
 tmpwav = CustomTempfile.new("rubytag-test-mpcbasic", "wav")
 @tmp.close
@@ -27,9 +18,6 @@ tmpwav.unlink
 
 file = TagLib::MPC::File.new(@tmp.path)
 doexit(-3) unless file.open?
-doexit(-4) unless \
-	file.tag.title == TEST_TITLE and \
-	file.tag.album == TEST_ALBUM and \
-	file.tag.artist == TEST_ARTIST
+doexit(-5) if file.tag and not ( file.tag.is_a?(TagLib::APE::Tag) or file.tag.is_a?(TagLib::ID3v1::Tag) )
 
 doexit
