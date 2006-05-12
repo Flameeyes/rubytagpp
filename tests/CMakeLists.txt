@@ -7,3 +7,4 @@ ADD_TEST(mp3basic ${RUNTEST_COMMAND} test-mp3basic.rb ${CMAKE_CURRENT_SOURCE_DIR
 ADD_TEST(oggbasic ${RUNTEST_COMMAND} test-oggbasic.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
 ADD_TEST(mp3writesave ${RUNTEST_COMMAND} test-mp3writesave.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
 ADD_TEST(oggfields ${RUNTEST_COMMAND} test-oggfields.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
+ADD_TEST(fileref ${RUNTEST_COMMAND} test-fileref.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
