@@ -1,9 +1,5 @@
-rubytag.cpp
-rubytag.h
 cmake_install.cmake
 Makefile
-CMakeTmp/
-CMakeFiles/
 CMakeCache.txt
 CMakeFiles
 CMakeTmp
@@ -11,3 +7,5 @@ rubytag/rubytagpp.h
 rubytag/rubytagpp.cpp
 simpletest.rb
 install_manifest.txt
+DartTestfile.txt
+Testing
