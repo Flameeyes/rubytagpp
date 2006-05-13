@@ -23,11 +23,22 @@ doexit(-1) unless system("bzcat #{ARGV[0]} | oggenc -q -1 - -o #{@tmp.path} -c '
 
 file = TagLib::Ogg::Vorbis::File.new(@tmp.path)
 doexit(-3) unless file.open?
+
+puts %@
+	Title: "#{file.tag.fieldListMap["TITLE"][0]}" (should be "#{TEST_TITLE}")
+	Title: "#{file.tag.fieldListMap["ALBUM"][0]}" (should be "#{TEST_ALBUM}")
+	Title: "#{file.tag.fieldListMap["ARTIST"][0]}" (should be "#{TEST_ARTIST}")
+	Title: "#{file.tag.fieldListMap["COMMENT"][0]}" (should be "#{TEST_COMMENT}")
+	Title: "#{file.tag.fieldListMap["TESTFIELD"][0]}" (should be "#{TEST_TESTFIELD}")
+@
+
 doexit(-4) unless \
-	file.tag.fieldListMap["TITLE"][0] == TEST_TITLE and \
-	file.tag.fieldListMap["ALBUM"][0] == TEST_ALBUM and \
-	file.tag.fieldListMap["ARTIST"][0] == TEST_ARTIST and \
-	file.tag.fieldListMap["COMMENT"][0] == TEST_COMMENT and \
-	file.tag.fieldListMap["TESTFIELD"][0] == TEST_TESTFIELD
+   file.tag.fieldListMap["TITLE"][0] == TEST_TITLE and \
+   file.tag.fieldListMap["ALBUM"][0] == TEST_ALBUM and \
+   file.tag.fieldListMap["ARTIST"][0] == TEST_ARTIST and \
+   file.tag.fieldListMap["COMMENT"][0] == TEST_COMMENT and \
+   file.tag.fieldListMap["TESTFIELD"][0] == TEST_TESTFIELD
 
 doexit
+
+# kate: encoding UTF-8; remove-trailing-space on; replace-trailing-space-save on; space-indent on; indent-width 3;
