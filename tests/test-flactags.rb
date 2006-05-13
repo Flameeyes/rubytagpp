@@ -30,6 +30,8 @@ if file.tag
       file.tag.is_a?(TagLib::ID3v1::Tag) or \
       file.tag.is_a?(TagLib::ID3v2::Tag) or \
       file.tag.is_a?(TagLib::Tag))
+else
+   puts "No base tag"
 end
 
 if file.xiph_comment
