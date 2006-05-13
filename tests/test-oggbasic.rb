@@ -27,5 +27,6 @@ doexit(-4) unless \
 	file.tag.album == TEST_ALBUM and \
 	file.tag.artist == TEST_ARTIST and \
 	file.tag.comment == TEST_COMMENT
+doexit(-5) if file.tag and not file.tag.is_a?(TagLib::Ogg::XiphComment)
 
 doexit
