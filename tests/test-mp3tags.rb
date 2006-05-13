@@ -50,8 +50,6 @@ if file.ID3v2Tag
    doexit(-8) if not file.ID3v2Tag.is_a?(TagLib::ID3v2::Tag)
 end
 
-doexit(-9) if file.audioProperties and not file.audioProperties.is_a?(TagLib::MPEG::Properties)
-
 doexit
 
 # kate: encoding UTF-8; remove-trailing-space on; replace-trailing-space-save on; space-indent on; indent-width 3;
