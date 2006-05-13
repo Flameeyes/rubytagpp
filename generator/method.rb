@@ -50,7 +50,7 @@ class ClassMethod
       if content and content["params"]
          content["params"].each { |p|
             @params << Parameter.new(p["type"], p["name"], p["optional"] == "yes")
-            @vararg ||= p["optional"] == "yes"
+            @vararg ||= (p["optional"] == "yes")
          }
       end
    end
