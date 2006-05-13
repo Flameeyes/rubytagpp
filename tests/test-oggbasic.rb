@@ -29,6 +29,4 @@ doexit(-4) unless \
 	file.tag.comment == TEST_COMMENT
 doexit(-5) if file.tag and not file.tag.is_a?(TagLib::Ogg::XiphComment)
 
-doexit(-9) if file.audioProperties and not file.audioProperties.is_a?(TagLib::Vorbis::Properties)
-
 doexit
