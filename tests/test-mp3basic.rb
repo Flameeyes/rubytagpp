@@ -24,15 +24,36 @@ doexit(-2) unless system("id3tool -t '#{TEST_TITLE}' -a '#{TEST_ALBUM}' -r '#{TE
 file = TagLib::MPEG::File.new(@tmp.path)
 doexit(-3) unless file.open?
 doexit(-4) unless \
-	file.tag.title == TEST_TITLE and \
-	file.tag.album == TEST_ALBUM and \
-	file.tag.artist == TEST_ARTIST
+   file.tag.title == TEST_TITLE and \
+   file.tag.album == TEST_ALBUM and \
+   file.tag.artist == TEST_ARTIST
 
-doexit(-5) if file.tag and not ( file.tag.is_a?(TagLib::APE::Tag) or file.tag.is_a?(TagLib::ID3v1::Tag) or file.tag.is_a?(TagLib::ID3v2::Tag) or file.tag.is_a?(TagLib::Tag))
-doexit(-6) if file.APETag and not file.APETag.is_a?(TagLib::APE::Tag)
-doexit(-7) if file.ID3v1Tag and not file.ID3v1Tag.is_a?(TagLib::ID3v1::Tag)
-doexit(-8) if file.ID3v2Tag and not file.ID3v2Tag.is_a?(TagLib::ID3v2::Tag)
+if file.tag
+   puts "File base tag is #{file.tag.class} (should be one of TagLib::APE::Tag, TagLib::ID3v1::Tag, TagLib::ID3v2::Tag or TagLib::Tag)"
+
+   doexit(-5) if not ( file.tag.is_a?(TagLib::APE::Tag) or \
+      file.tag.is_a?(TagLib::ID3v1::Tag) or \
+      file.tag.is_a?(TagLib::ID3v2::Tag) or \
+      file.tag.is_a?(TagLib::Tag))
+end
+
+if file.APETag
+   puts "File APE tag is #{file.APETag.class} (should be TagLib::APE::Tag)"
+   doexit(-6) if not file.APETag.is_a?(TagLib::APE::Tag)
+end
+
+if file.APETag
+   puts "File ID3v1 tag is #{file.ID3v1Tag.class} (should be TagLib::ID3v1::Tag)"
+   doexit(-7) if not file.ID3v1Tag.is_a?(TagLib::ID3v1::Tag)
+end
+
+if file.APETag
+   puts "File ID3v2 tag is #{file.ID3v2Tag.class} (should be TagLib::ID3v2::Tag)"
+   doexit(-8) if not file.ID3v2Tag.is_a?(TagLib::ID3v2::Tag)
+end
 
 doexit(-9) if file.audioProperties and not file.audioProperties.is_a?(TagLib::MPEG::Properties)
 
 doexit
+
+# kate: encoding UTF-8; remove-trailing-space on; replace-trailing-space-save on; space-indent on; indent-width 3;
