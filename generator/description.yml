@@ -303,6 +303,15 @@
               params: [ {name: "create", type: "bool", optional: "yes"} ]
             }
           ]
+        },
+        { name: "Properties",
+          parent: "TagLib::AudioProperties",
+          methods: [
+            { name: "layer", return: "int" },
+            { name: "protectionEnabled", return: "bool" },
+            { name: "isCopyrighted", return: "bool", aliases: [ "copyrighted?" ] },
+            { name: "isOriginal", return: "bool", aliases: [ "original?" ] }
+          ]
         }
       ]
     },
@@ -326,6 +335,12 @@
               return: "TagLib::APE::Tag",
               params: [ {name: "create", type: "bool", optional: "yes"} ]
             }
+          ]
+        },
+        { name: "Properties",
+          parent: "TagLib::AudioProperties",
+          methods: [
+            { name: "mpcVersion", return: "int" }
           ]
         }
       ]
