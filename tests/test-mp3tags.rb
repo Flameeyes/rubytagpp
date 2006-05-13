@@ -40,12 +40,12 @@ if file.APETag
    doexit(-6) if not file.APETag.is_a?(TagLib::APE::Tag)
 end
 
-if file.APETag
+if file.ID3v1Tag
    puts "File ID3v1 tag is #{file.ID3v1Tag.class} (should be TagLib::ID3v1::Tag)"
    doexit(-7) if not file.ID3v1Tag.is_a?(TagLib::ID3v1::Tag)
 end
 
-if file.APETag
+if file.ID3v2Tag
    puts "File ID3v2 tag is #{file.ID3v2Tag.class} (should be TagLib::ID3v2::Tag)"
    doexit(-8) if not file.ID3v2Tag.is_a?(TagLib::ID3v2::Tag)
 end
