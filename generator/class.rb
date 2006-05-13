@@ -145,6 +145,8 @@ static void #{varname}_free(void *p) {
 }
 
 VALUE cxx2ruby(#{@ns.name}::#{@name}* instance) {
+  if ( instance == NULL ) return Qnil;
+
   T#{ptrmap}::iterator it, eend = #{ptrmap}.end();
 
   for(it = #{ptrmap}.begin(); it != eend; it++)
