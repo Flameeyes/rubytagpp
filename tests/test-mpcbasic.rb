@@ -22,4 +22,6 @@ doexit(-5) if file.tag and not ( file.tag.is_a?(TagLib::APE::Tag) or file.tag.is
 doexit(-6) if file.APETag and not file.APETag.is_a?(TagLib::APE::Tag)
 doexit(-7) if file.ID3v1Tag and not file.ID3v1Tag.is_a?(TagLib::ID3v1::Tag)
 
+doexit(-9) if file.audioProperties and not file.audioProperties.is_a?(TagLib::MPC::Properties)
+
 doexit

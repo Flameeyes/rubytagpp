@@ -27,9 +27,12 @@ doexit(-4) unless \
 	file.tag.title == TEST_TITLE and \
 	file.tag.album == TEST_ALBUM and \
 	file.tag.artist == TEST_ARTIST
+
 doexit(-5) if file.tag and not ( file.tag.is_a?(TagLib::APE::Tag) or file.tag.is_a?(TagLib::ID3v1::Tag) or file.tag.is_a?(TagLib::ID3v2::Tag) or file.tag.is_a?(TagLib::Tag))
 doexit(-6) if file.APETag and not file.APETag.is_a?(TagLib::APE::Tag)
 doexit(-7) if file.ID3v1Tag and not file.ID3v1Tag.is_a?(TagLib::ID3v1::Tag)
 doexit(-8) if file.ID3v2Tag and not file.ID3v2Tag.is_a?(TagLib::ID3v2::Tag)
+
+doexit(-9) if file.audioProperties and not file.audioProperties.is_a?(TagLib::MPEG::Properties)
 
 doexit
