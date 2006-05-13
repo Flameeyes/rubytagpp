@@ -26,10 +26,10 @@ doexit(-3) unless file.open?
 
 puts %@
 	Title: "#{file.tag.fieldListMap["TITLE"][0]}" (should be "#{TEST_TITLE}")
-	Title: "#{file.tag.fieldListMap["ALBUM"][0]}" (should be "#{TEST_ALBUM}")
-	Title: "#{file.tag.fieldListMap["ARTIST"][0]}" (should be "#{TEST_ARTIST}")
-	Title: "#{file.tag.fieldListMap["COMMENT"][0]}" (should be "#{TEST_COMMENT}")
-	Title: "#{file.tag.fieldListMap["TESTFIELD"][0]}" (should be "#{TEST_TESTFIELD}")
+	Album: "#{file.tag.fieldListMap["ALBUM"][0]}" (should be "#{TEST_ALBUM}")
+	Artist: "#{file.tag.fieldListMap["ARTIST"][0]}" (should be "#{TEST_ARTIST}")
+	Comment: "#{file.tag.fieldListMap["COMMENT"][0]}" (should be "#{TEST_COMMENT}")
+	Test Field: "#{file.tag.fieldListMap["TESTFIELD"][0]}" (should be "#{TEST_TESTFIELD}")
 @
 
 doexit(-4) unless \
