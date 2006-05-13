@@ -18,3 +18,4 @@ ADD_TEST(oggfields ${RUNTEST_COMMAND} test-oggfields.rb ${CMAKE_CURRENT_SOURCE_D
 ADD_TEST(oggproperties ${RUNTEST_COMMAND} test-oggproperties.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
 
 ADD_TEST(flacbasic ${RUNTEST_COMMAND} test-flacbasic.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
+ADD_TEST(flactags ${RUNTEST_COMMAND} test-flactags.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
