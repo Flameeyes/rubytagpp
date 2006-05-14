@@ -1,0 +1,10 @@
+CMakeCache.txt
+CMakeFiles
+DartTestfile.txt
+Makefile
+Testing
+cmake_install.cmake
+rubytag/rubytagpp.cpp
+rubytag/rubytagpp.h
+rubytagpp.so
+
