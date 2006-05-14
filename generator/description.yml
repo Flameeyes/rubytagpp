@@ -52,6 +52,9 @@
             { name: "bitrate", return: "int" },
             { name: "sampleRate", return: "int" },
             { name: "channels", return: "int" }
+          ],
+          constants: [
+            { name: "Fast" }, { name: "Average"}, { name: "Accurate" }
           ]
         },
         { name: "File",
