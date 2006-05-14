@@ -38,3 +38,5 @@ ADD_TEST(oggflacbasic ${RUNTEST_COMMAND} test-oggflacbasic.rb ${CMAKE_CURRENT_SO
 ADD_TEST(oggflacfields ${RUNTEST_COMMAND} test-oggflacfields.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
 ADD_TEST(oggflacfileref ${RUNTEST_COMMAND} test-oggflacfileref.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
 SET_TESTS_PROPERTIES(oggflacfileref PROPERTIES WILL_FAIL true) # Look comment in test script
+ADD_TEST(oggflacwrite ${RUNTEST_COMMAND} test-vorbiswrite.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
+ADD_TEST(oggflacwrite-fields ${RUNTEST_COMMAND} test-oggflacwrite-fields.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
