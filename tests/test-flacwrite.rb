@@ -8,7 +8,12 @@ cvt = FlacConverter.new
 savefile = TagLib::FLAC::File.new(cvt.path)
 exit -2 unless savefile.open?
 
-exit -3 unless savefile.ID3v2Tag(true)
+if not savefile.tag
+   puts "No base tag found, creating an ID3v2 one."
+   exit -3 unless savefile.ID3v2Tag(true)
+   savefile = TagLib::FLAC::File.new(cvt.path)
+   exit -2 unless savefile.open?
+end
 
 savefile.tag.title = Converter::TEST_TITLE
 savefile.tag.album = Converter::TEST_ALBUM
@@ -38,3 +43,5 @@ exit -5 unless \
 	file.tag.comment == Converter::TEST_COMMENT
 
 exit 0
+
+# kate: encoding UTF-8; remove-trailing-space on; replace-trailing-space-save on; space-indent on; indent-width 3;
