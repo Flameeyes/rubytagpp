@@ -1,32 +1,26 @@
-# Simple test of getting data out of an ogg file
+# Simple test of getting data out of an Ogg Vorbis file
 
 require "rubytagpp"
-require "tempfile"
+require "converters"
 
-TEST_TITLE = "This is a test"
-TEST_ALBUM = "Run your little test"
-TEST_ARTIST = "The Testers"
-TEST_COMMENT = "If you had not forseen this, this is a test file."
+cvt = VorbisConverter.new()
 
-# First of all, create a temporary file
-@tmp = Tempfile.new("rubytag-test-oggbasic.ogg")
-@tmp.close
+file = TagLib::Ogg::Vorbis::File.new(cvt.path)
+exit -3 unless file.open? and file.tag
 
-def doexit(ret = 0)
-    @tmp.unlink
-    exit ret
-end
+puts %@
+	Title: "#{file.tag.title}" (should be "#{Converter::TEST_TITLE}")
+	Album: "#{file.tag.album}" (should be "#{Converter::TEST_ALBUM}")
+	Artist: "#{file.tag.artist}" (should be "#{Converter::TEST_ARTIST}")
+	Comment: "#{file.tag.comment}" (should be "#{Converter::TEST_COMMENT}")
+@
 
-# Convert the compressed wave in ogg/vorbis and set test tags
-doexit(-1) unless system("bzcat #{ARGV[0]} | oggenc -q -1 - -o #{@tmp.path} -c 'COMMENT=#{TEST_COMMENT}' -t '#{TEST_TITLE}' -l '#{TEST_ALBUM}' -a '#{TEST_ARTIST}'")
+exit -4 unless \
+	file.tag.title == Converter::TEST_TITLE and \
+	file.tag.album == Converter::TEST_ALBUM and \
+	file.tag.artist == Converter::TEST_ARTIST and \
+	file.tag.comment == Converter::TEST_COMMENT
 
-file = TagLib::Ogg::Vorbis::File.new(@tmp.path)
-doexit(-3) unless file.open?
-doexit(-4) unless \
-	file.tag.title == TEST_TITLE and \
-	file.tag.album == TEST_ALBUM and \
-	file.tag.artist == TEST_ARTIST and \
-	file.tag.comment == TEST_COMMENT
-doexit(-5) if file.tag and not file.tag.is_a?(TagLib::Ogg::XiphComment)
+exit -5 if file.tag and not file.tag.is_a?(TagLib::Ogg::XiphComment)
 
-doexit
+exit 0

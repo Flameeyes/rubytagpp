@@ -1,24 +1,13 @@
 # Simple test of getting data out of an MPC file
 
 require "rubytagpp"
-require "custom-tmpfile"
+require "converters"
 
-def doexit(ret = 0)
-    @tmp.unlink
-    exit ret
-end
+cvt = MPCConverter.new
 
-# Convert the compressed wave in mpc
-@tmp = CustomTempfile.new("rubytag-test-mpcbasic", "mpc")
-tmpwav = CustomTempfile.new("rubytag-test-mpcbasic", "wav")
-@tmp.close
-tmpwav.close
-doexit(-21) unless system("bzcat #{ARGV[0]} > #{tmpwav.path} && mppenc --overwrite --thumb #{tmpwav.path}")
-tmpwav.unlink
+file = TagLib::MPC::File.new(cvt.path)
+exit -3 unless file.open?
 
-file = TagLib::MPC::File.new(@tmp.path)
-doexit(-3) unless file.open?
+exit -9 if file.audioProperties and not file.audioProperties.is_a?(TagLib::MPC::Properties)
 
-doexit(-9) if file.audioProperties and not file.audioProperties.is_a?(TagLib::MPC::Properties)
-
-doexit
+exit 0

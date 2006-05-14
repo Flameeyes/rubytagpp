@@ -1,35 +1,19 @@
 # Simple test of getting data out of an mp3 file
 
 require "rubytagpp"
-require "tempfile"
+require "converters"
 
-TEST_TITLE = "This is a test"
-TEST_ALBUM = "Run your little test"
-TEST_ARTIST = "The Testers"
-TEST_TRACK = 1
+cvt = MP3Converter.new
 
-# First of all, create a temporary file
-@tmp = Tempfile.new("rubytag-test-mp3basic.mp3")
-@tmp.close
+file = TagLib::MPEG::File.new(cvt.path)
+exit -3 unless file.open?
+exit -4 unless \
+   file.tag.title == Converter::TEST_TITLE and \
+   file.tag.album == Converter::TEST_ALBUM and \
+   file.tag.artist == Converter::TEST_ARTIST
 
-def doexit(ret = 0)
-    @tmp.unlink
-    exit ret
-end
+exit -9 if file.audioProperties and not file.audioProperties.is_a?(TagLib::MPEG::Properties)
 
-# Convert the compressed wave in mp3 and set test tags
-doexit(-1) unless system("bzcat #{ARGV[0]} | lame -f - #{@tmp.path}")
-doexit(-2) unless system("id3tool -t '#{TEST_TITLE}' -a '#{TEST_ALBUM}' -r '#{TEST_ARTIST}' #{@tmp.path}")
-
-file = TagLib::MPEG::File.new(@tmp.path)
-doexit(-3) unless file.open?
-doexit(-4) unless \
-   file.tag.title == TEST_TITLE and \
-   file.tag.album == TEST_ALBUM and \
-   file.tag.artist == TEST_ARTIST
-
-doexit(-9) if file.audioProperties and not file.audioProperties.is_a?(TagLib::MPEG::Properties)
-
-doexit
+exit 0
 
 # kate: encoding UTF-8; remove-trailing-space on; replace-trailing-space-save on; space-indent on; indent-width 3;

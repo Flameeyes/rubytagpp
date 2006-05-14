@@ -1,44 +1,28 @@
 # Simple test of getting data out of an ogg file with the raw fields list
 
 require "rubytagpp"
-require "tempfile"
+require "converters"
 
-TEST_TITLE = "This is a test"
-TEST_ALBUM = "Run your little test"
-TEST_ARTIST = "The Testers"
-TEST_COMMENT = "If you had not forseen this, this is a test file."
-TEST_TESTFIELD = "Noone knows about this"
+cvt = VorbisConverter.new()
 
-# First of all, create a temporary file
-@tmp = Tempfile.new("rubytag-test-oggfields.ogg")
-@tmp.close
-
-def doexit(ret = 0)
-    @tmp.unlink
-    exit ret
-end
-
-# Convert the compressed wave in ogg/vorbis and set test tags
-doexit(-1) unless system("bzcat #{ARGV[0]} | oggenc -q -1 - -o #{@tmp.path} -c 'COMMENT=#{TEST_COMMENT}' -t '#{TEST_TITLE}' -l '#{TEST_ALBUM}' -a '#{TEST_ARTIST}' -c 'TESTFIELD=#{TEST_TESTFIELD}'")
-
-file = TagLib::Ogg::Vorbis::File.new(@tmp.path)
-doexit(-3) unless file.open?
+file = TagLib::Ogg::Vorbis::File.new(cvt.path)
+exit -3 unless file.open?
 
 puts %@
-	Title: "#{file.tag.fieldListMap["TITLE"][0]}" (should be "#{TEST_TITLE}")
-	Album: "#{file.tag.fieldListMap["ALBUM"][0]}" (should be "#{TEST_ALBUM}")
-	Artist: "#{file.tag.fieldListMap["ARTIST"][0]}" (should be "#{TEST_ARTIST}")
-	Comment: "#{file.tag.fieldListMap["COMMENT"][0]}" (should be "#{TEST_COMMENT}")
-	Test Field: "#{file.tag.fieldListMap["TESTFIELD"][0]}" (should be "#{TEST_TESTFIELD}")
+	Title: "#{file.tag.fieldListMap["TITLE"][0]}" (should be "#{Converter::TEST_TITLE}")
+	Album: "#{file.tag.fieldListMap["ALBUM"][0]}" (should be "#{Converter::TEST_ALBUM}")
+	Artist: "#{file.tag.fieldListMap["ARTIST"][0]}" (should be "#{Converter::TEST_ARTIST}")
+	Comment: "#{file.tag.fieldListMap["COMMENT"][0]}" (should be "#{Converter::TEST_COMMENT}")
+	Test Field: "#{file.tag.fieldListMap["TESTFIELD"][0]}" (should be "#{Converter::TEST_TESTFIELD}")
 @
 
-doexit(-4) unless \
-   file.tag.fieldListMap["TITLE"][0] == TEST_TITLE and \
-   file.tag.fieldListMap["ALBUM"][0] == TEST_ALBUM and \
-   file.tag.fieldListMap["ARTIST"][0] == TEST_ARTIST and \
-   file.tag.fieldListMap["COMMENT"][0] == TEST_COMMENT and \
-   file.tag.fieldListMap["TESTFIELD"][0] == TEST_TESTFIELD
+exit -4 unless \
+   file.tag.fieldListMap["TITLE"][0] == Converter::TEST_TITLE and \
+   file.tag.fieldListMap["ALBUM"][0] == Converter::TEST_ALBUM and \
+   file.tag.fieldListMap["ARTIST"][0] == Converter::TEST_ARTIST and \
+   file.tag.fieldListMap["COMMENT"][0] == Converter::TEST_COMMENT and \
+   file.tag.fieldListMap["TESTFIELD"][0] == Converter::TEST_TESTFIELD
 
-doexit
+exit 0
 
 # kate: encoding UTF-8; remove-trailing-space on; replace-trailing-space-save on; space-indent on; indent-width 3;

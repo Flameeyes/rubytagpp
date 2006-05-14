@@ -2,34 +2,23 @@
 # correspond to the ones asked to oggenc.
 
 require "rubytagpp"
-require "tempfile"
+require "converters"
 
-MAXIMUM_BITRATE = 234
-MINIMUM_BITRATE = 20
+cvt = VorbisConverter.new(false, true)
 
-# First of all, create a temporary file
-@tmp = Tempfile.new("rubytag-test-oggbasic.ogg")
-@tmp.close
+file = TagLib::Ogg::Vorbis::File.new(cvt.path)
+exit -3 unless file.open?
 
-def doexit(ret = 0)
-    @tmp.unlink
-    exit ret
-end
-
-# Convert the compressed wave in ogg/vorbis and set test tags
-doexit(-1) unless system("bzcat #{ARGV[0]} | oggenc -q -1 - -o #{@tmp.path} -m #{MINIMUM_BITRATE} -M #{MAXIMUM_BITRATE}")
-
-file = TagLib::Ogg::Vorbis::File.new(@tmp.path)
-doexit(-3) unless file.open?
-doexit(-4) if file.audio_properties and not file.audio_properties.is_a?(TagLib::Vorbis::Properties)
+puts "File audio properties are #{file.audio_properties.class} (should be TagLib::Vorbis::Properties)"
+exit -4 if file.audio_properties and not file.audio_properties.is_a?(TagLib::Vorbis::Properties)
 
 puts %@
-	Maximum bitrate: #{file.audio_properties.bitrate_maximum} (should be #{MAXIMUM_BITRATE*1000})
-	Minimum bitrate: #{file.audio_properties.bitrate_minimum} (should be #{MINIMUM_BITRATE*1000})
+	Maximum bitrate: #{file.audio_properties.bitrate_maximum} (should be #{VorbisConverter::MAXIMUM_BITRATE*1000})
+	Minimum bitrate: #{file.audio_properties.bitrate_minimum} (should be #{VorbisConverter::MINIMUM_BITRATE*1000})
 @
 
 # oggenc takes bitrates in kbps, while taglib returns them in bps, take this into account!
-doexit(-5) if file.audio_properties.bitrate_maximum != MAXIMUM_BITRATE*1000 or \
-	file.audio_properties.bitrate_minimum != MINIMUM_BITRATE*1000
+exit -5 if file.audio_properties.bitrate_maximum != VorbisConverter::MAXIMUM_BITRATE*1000 or \
+	file.audio_properties.bitrate_minimum != VorbisConverter::MINIMUM_BITRATE*1000
 
-doexit
+exit 0
