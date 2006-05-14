@@ -179,6 +179,8 @@ class ClassMethod
       if @aliases
          @aliases.each { |meth_alias|
             res << "rb_define_alias(c#{@cls.varname}, \"#{meth_alias}\", \"#{@bindname}\");\n"
+            nocamel_alias = meth_alias.gsub(/([^A-Z])([A-Z])([^A-Z])/) { |letter| "#{$1}_#{$2.downcase}#{$3}" }
+            res << "rb_define_alias(c#{@cls.varname}, \"#{nocamel_alias}\", \"#{@bindname}\");\n"
          }
       end
 
