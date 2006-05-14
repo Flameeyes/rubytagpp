@@ -111,15 +111,23 @@ class ClassMethod
             {
             @
 
-         @params.each_index { |n|
+         for n in 0..(@params.size-1)
             if @params[n].optional
+               ret << "case #{n}: "
                if @return and @return != "void"
-                  ret << "case #{n}: return cxx2ruby(tmp->#{@name}(#{params_conversion(n)}));\n"
+                  ret << "return cxx2ruby(tmp->#{@name}(#{params_conversion(n)}));\n"
                else
-                  ret << "case #{n}: tmp->#{@name}(#{params_conversion(n)}); return Qnil;\n"
+                  ret << "tmp->#{@name}(#{params_conversion(n)}); return Qnil;\n"
                end
             end
-         }
+         end
+
+         ret << "case #{@params.size}: "
+         if @return and @return != "void"
+            ret << "return cxx2ruby(tmp->#{@name}(#{params_conversion(@params.size)}));\n"
+         else
+            ret << "tmp->#{@name}(#{params_conversion(@params.size)}); return Qnil;\n"
+         end
 
          ret << %@
                default: rb_raise(rb_eArgError, "Mantatory parameters missing"); return Qnil;
@@ -144,11 +152,11 @@ class ClassMethod
             {
 @
 
-         @params.each_index { |n|
+         for n in 0..(@params.size-1)
             if @params[n].optional
                ret << "case #{n}: tmp = new #{@cls.ns.name}::#{@cls.name}(#{params_conversion(n)}); break;\n"
             end
-         }
+         end
 
          ret << %@
                case #{@params.size}: tmp = new #{@cls.ns.name}::#{@cls.name}(#{params_conversion(@params.size)}); break;
