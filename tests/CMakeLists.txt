@@ -8,7 +8,7 @@ ADD_TEST(fileref ${RUNTEST_COMMAND} test-fileref.rb ${CMAKE_CURRENT_SOURCE_DIR}/
 
 ADD_TEST(mp3basic ${RUNTEST_COMMAND} test-mp3basic.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
 ADD_TEST(mp3tags ${RUNTEST_COMMAND} test-mp3tags.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
-ADD_TEST(mp3writesave ${RUNTEST_COMMAND} test-mp3writesave.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
+ADD_TEST(mp3write ${RUNTEST_COMMAND} test-mp3write.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
 
 ADD_TEST(mpcbasic ${RUNTEST_COMMAND} test-mpcbasic.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
 ADD_TEST(mpctags ${RUNTEST_COMMAND} test-mpctags.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
