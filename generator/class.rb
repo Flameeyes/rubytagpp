@@ -24,6 +24,7 @@ class Class
       @name = name
       @@classes["#{@ns.name}::#{@name}"] = self
       @methods = Array.new
+      @constants = Array.new
       @parent = content["parent"] ? @@classes[content["parent"]] : nil
       @parent.children << self if @parent
 
@@ -32,6 +33,13 @@ class Class
       if content["methods"]
          content["methods"].each { |method|
             @methods << ClassMethod.new(self, method["name"], method)
+         }
+      end
+
+      if content["constants"]
+         content["constants"].each { |constant|
+            constant["value"] = "#{@ns.name}::#{@name}::#{constant["name"]}"
+            @constants << constant
          }
       end
 
@@ -176,16 +184,22 @@ static VALUE #{varname}_alloc(VALUE self) {
 
    def methods_init
       res = ""
-      @methods.each do |method| res << method.init; end
       res
    end
 
    def init
-      %@
+      res = %@
 c#{varname} = rb_define_class_under(#{@ns.varname}, \"#{@name.split("::").last}\", #{parentvar});
 rb_define_alloc_func(c#{varname}, #{varname}_alloc);
-#{methods_init}
       @
+
+      @methods.each do |method| res << method.init; end
+
+      @constants.each { |constant|
+         res << "rb_define_const(c#{varname}, \"#{constant["name"]}\", cxx2ruby(#{constant["value"]}));\n"
+      }
+
+      res
    end
 end
 
