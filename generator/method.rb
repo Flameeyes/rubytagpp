@@ -178,12 +178,12 @@ class ClassMethod
       res = "rb_define_method(c#{@cls.varname}, \"#{@bindname}\", RUBY_METHOD_FUNC(#{varname}), #{@vararg ? "-1" : @params.length});\n"
       if @aliases
          @aliases.each { |meth_alias|
-            res << "rb_define_method(c#{@cls.varname}, \"#{meth_alias}\", RUBY_METHOD_FUNC(#{varname}), #{@vararg ? "-1" : @params.length});\n"
+            res << "rb_define_alias(c#{@cls.varname}, \"#{meth_alias}\", \"#{@bindname}\");\n"
          }
       end
 
       nocamel_bindname = @bindname.gsub(/([^A-Z])([A-Z])([^A-Z])/) { |letter| "#{$1}_#{$2.downcase}#{$3}" }
-      res << "rb_define_method(c#{@cls.varname}, \"#{nocamel_bindname}\", RUBY_METHOD_FUNC(#{varname}), #{@vararg ? "-1" : @params.length});\n"
+      res << "rb_define_alias(c#{@cls.varname}, \"#{nocamel_bindname}\", \"#{@bindname}\");\n"
 
       res
    end
