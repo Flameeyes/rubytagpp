@@ -9,6 +9,10 @@ cvt = VorbisConverter.new(false)
 savefile = TagLib::Ogg::FLAC::File.new(cvt.path)
 exit -3 unless savefile.open? or savefile.read_only?
 
+if not savefile.valid?
+   puts "Ogg Flac file #{cvt.path} is not valid."
+end
+
 savefile.tag.addField("TITLE", Converter::TEST_TITLE)
 savefile.tag.addField("ALBUM", Converter::TEST_ALBUM)
 savefile.tag.addField("ARTIST", Converter::TEST_ARTIST)
