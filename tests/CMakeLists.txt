@@ -15,6 +15,9 @@ ADD_TEST(mp3write-ape ${RUNTEST_COMMAND} test-mp3write-ape.rb ${CMAKE_CURRENT_SO
 
 ADD_TEST(mpcbasic ${RUNTEST_COMMAND} test-mpcbasic.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
 ADD_TEST(mpctags ${RUNTEST_COMMAND} test-mpctags.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
+ADD_TEST(mpcwrite ${RUNTEST_COMMAND} test-mpcwrite.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
+ADD_TEST(mpcwrite-ape ${RUNTEST_COMMAND} test-mpcwrite-ape.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
+ADD_TEST(mpcwrite-id3v1 ${RUNTEST_COMMAND} test-mpcwrite-id3v1.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
 
 ADD_TEST(vorbisbasic ${RUNTEST_COMMAND} test-vorbisbasic.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
 ADD_TEST(vorbisfields ${RUNTEST_COMMAND} test-vorbisfields.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
