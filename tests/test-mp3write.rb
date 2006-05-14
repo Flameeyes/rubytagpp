@@ -13,7 +13,10 @@ savefile.tag.album = Converter::TEST_ALBUM
 savefile.tag.artist = Converter::TEST_ARTIST
 savefile.tag.track = Converter::TEST_TRACK
 
-savefile.save
+if not savefile.save
+   puts "Error while saving the file."
+   exit -2
+end
 
 readfile = TagLib::MPEG::File.new(cvt.path)
 exit -4 unless readfile.open?

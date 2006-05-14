@@ -15,7 +15,10 @@ savefile.ID3v2Tag.album = Converter::TEST_ALBUM
 savefile.ID3v2Tag.artist = Converter::TEST_ARTIST
 savefile.ID3v2Tag.comment = Converter::TEST_COMMENT
 
-savefile.save
+if not savefile.save
+   puts "Error while saving the file."
+   exit -2
+end
 
 readfile = TagLib::FLAC::File.new(cvt.path)
 exit -4 unless readfile.open?

@@ -15,7 +15,10 @@ savefile.xiph_comment.album = Converter::TEST_ALBUM
 savefile.xiph_comment.artist = Converter::TEST_ARTIST
 savefile.xiph_comment.comment = Converter::TEST_COMMENT
 
-savefile.save
+if not savefile.save
+   puts "Error while saving the file."
+   exit -2
+end
 
 readfile = TagLib::FLAC::File.new(cvt.path)
 exit -4 unless readfile.open?
