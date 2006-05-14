@@ -339,6 +339,10 @@
               return: "TagLib::APE::Tag",
               params: [ {name: "create", type: "bool", optional: "yes"} ]
             }
+          ],
+          constants: [
+            { name: "NoTags" }, { name: "ID3v1" }, { name: "ID3v2" },
+            { name: "APE" }, { name: "AllTags" }
           ]
         },
         { name: "Properties",
