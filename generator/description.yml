@@ -62,7 +62,7 @@
             { name: "name", return: "char*" },
             { name: "tag", return: "Tag*" },
             { name: "save", return: "bool" },
-            { name: "readOnly", return: "bool", aliases: [ "readOnly?", "read_only?" ] },
+            { name: "readOnly", return: "bool", aliases: [ "readOnly?" ] },
             { name: "isOpen", return: "bool", aliases: [ "open?" ] },
             { name: "isValid", return: "bool", aliases: [ "valid?" ] },
             { name: "audioProperties", return: "TagLib::AudioProperties" }
