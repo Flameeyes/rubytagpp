@@ -34,7 +34,7 @@ static inline int ruby2int(VALUE rval)
 
 static inline bool ruby2bool(VALUE rval)
 {
-    return (bool)(NUM2INT(rval));
+    return !( rval == Qnil || rval == Qfalse );
 }
 
 static inline char *ruby2charPtr(VALUE rval)
