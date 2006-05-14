@@ -180,12 +180,14 @@ class ClassMethod
          @aliases.each { |meth_alias|
             res << "rb_define_alias(c#{@cls.varname}, \"#{meth_alias}\", \"#{@bindname}\");\n"
             nocamel_alias = meth_alias.gsub(/([^A-Z])([A-Z])([^A-Z])/) { |letter| "#{$1}_#{$2.downcase}#{$3}" }
-            res << "rb_define_alias(c#{@cls.varname}, \"#{nocamel_alias}\", \"#{@bindname}\");\n"
+            res << "rb_define_alias(c#{@cls.varname}, \"#{nocamel_alias}\", \"#{@bindname}\");\n" \
+               unless nocamel_alias == meth_alias
          }
       end
 
       nocamel_bindname = @bindname.gsub(/([^A-Z])([A-Z])([^A-Z])/) { |letter| "#{$1}_#{$2.downcase}#{$3}" }
-      res << "rb_define_alias(c#{@cls.varname}, \"#{nocamel_bindname}\", \"#{@bindname}\");\n"
+      res << "rb_define_alias(c#{@cls.varname}, \"#{nocamel_bindname}\", \"#{@bindname}\");\n" \
+         unless nocamel_bindname == @bindname
 
       res
    end
