@@ -214,7 +214,7 @@
               return: "void", params: [
                 {name: "key", type: "String"},
                 {name: "value", type: "String"},
-                {name: "replace", type: "bool"}
+                {name: "replace", type: "bool", optional: "yes"}
               ]
             },
             { name: "fieldListMap", return: "FieldListMap" }
