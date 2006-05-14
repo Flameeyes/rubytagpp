@@ -13,9 +13,9 @@ ADD_TEST(mp3write ${RUNTEST_COMMAND} test-mp3write.rb ${CMAKE_CURRENT_SOURCE_DIR
 ADD_TEST(mpcbasic ${RUNTEST_COMMAND} test-mpcbasic.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
 ADD_TEST(mpctags ${RUNTEST_COMMAND} test-mpctags.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
 
-ADD_TEST(oggbasic ${RUNTEST_COMMAND} test-oggbasic.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
-ADD_TEST(oggfields ${RUNTEST_COMMAND} test-oggfields.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
-ADD_TEST(oggproperties ${RUNTEST_COMMAND} test-oggproperties.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
+ADD_TEST(vorbisbasic ${RUNTEST_COMMAND} test-vorbisbasic.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
+ADD_TEST(vorbisfields ${RUNTEST_COMMAND} test-vorbisfields.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
+ADD_TEST(vorbisproperties ${RUNTEST_COMMAND} test-vorbisproperties.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
 
 ADD_TEST(flacbasic ${RUNTEST_COMMAND} test-flacbasic.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
 ADD_TEST(flactags ${RUNTEST_COMMAND} test-flactags.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
