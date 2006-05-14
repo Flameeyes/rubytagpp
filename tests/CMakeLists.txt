@@ -20,6 +20,7 @@ ADD_TEST(vorbisproperties ${RUNTEST_COMMAND} test-vorbisproperties.rb ${CMAKE_CU
 ADD_TEST(flacbasic ${RUNTEST_COMMAND} test-flacbasic.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
 ADD_TEST(flactags ${RUNTEST_COMMAND} test-flactags.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
 ADD_TEST(flacwrite ${RUNTEST_COMMAND} test-flacwrite.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
+ADD_TEST(flacwrite-id3v2 ${RUNTEST_COMMAND} test-flacwrite-id3v2.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
 
 ADD_TEST(oggflacbasic ${RUNTEST_COMMAND} test-oggflacbasic.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
 ADD_TEST(oggflacfields ${RUNTEST_COMMAND} test-oggflacfields.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
