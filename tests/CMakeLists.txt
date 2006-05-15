@@ -12,6 +12,7 @@ ADD_TEST(mp3write ${RUNTEST_COMMAND} test-mp3write.rb ${CMAKE_CURRENT_SOURCE_DIR
 ADD_TEST(mp3write-id3v2 ${RUNTEST_COMMAND} test-mp3write-id3v2.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
 ADD_TEST(mp3write-id3v1 ${RUNTEST_COMMAND} test-mp3write-id3v1.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
 ADD_TEST(mp3write-ape ${RUNTEST_COMMAND} test-mp3write-ape.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
+ADD_TEST(mp3-id3v1-render ${RUNTEST_COMMAND} test-mp3-id3v1-render.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
 
 ADD_TEST(mpcbasic ${RUNTEST_COMMAND} test-mpcbasic.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
 ADD_TEST(mpctags ${RUNTEST_COMMAND} test-mpctags.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
@@ -20,6 +21,7 @@ ADD_TEST(mpcfileref ${RUNTEST_COMMAND} test-mpcfileref.rb ${CMAKE_CURRENT_SOURCE
 ADD_TEST(mpcwrite ${RUNTEST_COMMAND} test-mpcwrite.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
 ADD_TEST(mpcwrite-ape ${RUNTEST_COMMAND} test-mpcwrite-ape.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
 ADD_TEST(mpcwrite-id3v1 ${RUNTEST_COMMAND} test-mpcwrite-id3v1.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
+ADD_TEST(mpc-id3v1-render ${RUNTEST_COMMAND} test-mpc-id3v1-render.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
 
 ADD_TEST(vorbisbasic ${RUNTEST_COMMAND} test-vorbisbasic.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
 ADD_TEST(vorbisfields ${RUNTEST_COMMAND} test-vorbisfields.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
@@ -36,6 +38,7 @@ ADD_TEST(flacwrite ${RUNTEST_COMMAND} test-flacwrite.rb ${CMAKE_CURRENT_SOURCE_D
 ADD_TEST(flacwrite-id3v2 ${RUNTEST_COMMAND} test-flacwrite-id3v2.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
 ADD_TEST(flacwrite-id3v1 ${RUNTEST_COMMAND} test-flacwrite-id3v1.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
 ADD_TEST(flacwrite-xiph ${RUNTEST_COMMAND} test-flacwrite-xiph.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
+ADD_TEST(flac-id3v1-render ${RUNTEST_COMMAND} test-flac-id3v1-render.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
 
 ADD_TEST(oggflacbasic ${RUNTEST_COMMAND} test-oggflacbasic.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
 ADD_TEST(oggflacfields ${RUNTEST_COMMAND} test-oggflacfields.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)

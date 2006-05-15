@@ -198,7 +198,10 @@
     { name: "TagLib::ID3v1",
       classes: [
         { name: "Tag",
-          parent: "TagLib::Tag"
+          parent: "TagLib::Tag",
+          methods: [
+            { name: "render", return: "ByteVector" }
+          ]
         }
       ]
     },
