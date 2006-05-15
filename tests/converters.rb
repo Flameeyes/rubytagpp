@@ -38,6 +38,11 @@ class Converter
    TEST_TESTFIELD = "Noone knows about this"
    TEST_TRACK = 12
 
+   # Specific of the emptywave.wav test file: 44.1KHz Stereo, 5 seconds length
+   SAMPLE_RATE = 44100
+   CHANNELS = 2
+   LENGTH = 5
+
    def initialize(extension)
       @tmp = CustomTempfile.new("converter", extension)
       @tmp.close
@@ -49,13 +54,22 @@ class Converter
 end
 
 class MP3Converter < Converter
-   def initialize(tag = true)
+   BITRATE = 128
+   LAYER = 3
+   PROTECTION = false
+   COPYRIGHTED = false
+   ORIGINAL = false
+
+   def initialize(tag = true, bitrates = false)
       super("mp3")
 
       extraopts = ""
 
       extraopts = "#{extraopts} --tt '#{TEST_TITLE}' --ta '#{TEST_ARTIST}' --tl '#{TEST_ALBUM}' --tn '#{TEST_TRACK}'" \
          if tag
+
+      extraopts = "#{extraopts} -b #{BITRATE}" \
+         if bitrates
 
       exit -1 if not system("bzcat #{ARGV[0]} | lame #{extraopts} -f - #{@tmp.path}")
    end

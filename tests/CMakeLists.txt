@@ -6,6 +6,7 @@ ADD_TEST(decompressing ${RUNTEST_COMMAND} test-decompressing.rb ${CMAKE_CURRENT_
 
 ADD_TEST(mp3basic ${RUNTEST_COMMAND} test-mp3basic.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
 ADD_TEST(mp3tags ${RUNTEST_COMMAND} test-mp3tags.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
+ADD_TEST(mp3properties ${RUNTEST_COMMAND} test-mp3properties.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
 ADD_TEST(mp3fileref ${RUNTEST_COMMAND} test-mp3fileref.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
 ADD_TEST(mp3write ${RUNTEST_COMMAND} test-mp3write.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
 ADD_TEST(mp3write-id3v2 ${RUNTEST_COMMAND} test-mp3write-id3v2.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
