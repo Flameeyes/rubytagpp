@@ -321,6 +321,7 @@
         { name: "Properties",
           parent: "TagLib::AudioProperties",
           methods: [
+            { name: "version", return: "int" },
             { name: "layer", return: "int" },
             { name: "protectionEnabled", return: "bool" },
             { name: "isCopyrighted", return: "bool", aliases: [ "copyrighted?" ] },
