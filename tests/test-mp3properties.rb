@@ -22,6 +22,7 @@ puts %@
 	Protection: #{file.audio_properties.protection_enabled} (should be #{MP3Converter::PROTECTION})
 	Copyrighted: #{file.audio_properties.copyrighted?} (should be #{MP3Converter::COPYRIGHTED})
 	Original: #{file.audio_properties.original?} (should be #{MP3Converter::ORIGINAL})
+	Channel mode: #{file.audio_properties.channel_mode} (should be #{MP3Converter::CHANNEL_MODE})
 @
 
 exit -5 if file.audio_properties.sample_rate != Converter::SAMPLE_RATE or \
@@ -31,6 +32,7 @@ exit -5 if file.audio_properties.sample_rate != Converter::SAMPLE_RATE or \
 	file.audio_properties.layer != MP3Converter::LAYER or \
 	file.audio_properties.protection_enabled != MP3Converter::PROTECTION or \
 	file.audio_properties.copyrighted? != MP3Converter::COPYRIGHTED or \
-	file.audio_properties.original? != MP3Converter::ORIGINAL
+	file.audio_properties.original? != MP3Converter::ORIGINAL or \
+	file.audio_properties.channel_mode != MP3Converter::CHANNEL_MODE
 
 exit 0

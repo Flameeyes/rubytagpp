@@ -59,6 +59,7 @@ class MP3Converter < Converter
    PROTECTION = false
    COPYRIGHTED = false
    ORIGINAL = false
+   CHANNEL_MODE = TagLib::MPEG::Header::Stereo
 
    def initialize(tag = true, bitrates = false)
       super("mp3")

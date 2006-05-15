@@ -324,6 +324,7 @@
             { name: "version", return: "int" },
             { name: "layer", return: "int" },
             { name: "protectionEnabled", return: "bool" },
+            { name: "channelMode", return: "int" },
             { name: "isCopyrighted", return: "bool", aliases: [ "copyrighted?" ] },
             { name: "isOriginal", return: "bool", aliases: [ "original?" ] }
           ]
