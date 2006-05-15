@@ -51,10 +51,13 @@ end
 class MP3Converter < Converter
    def initialize(tag = true)
       super("mp3")
-      exit -1 if not system("bzcat #{ARGV[0]} | lame -f - #{@tmp.path}")
-      if tag
-         exit -1 if not system("id3tool -t '#{TEST_TITLE}' -a '#{TEST_ALBUM}' -r '#{TEST_ARTIST}' #{@tmp.path}")
-      end
+
+      extraopts = ""
+
+      extraopts = "#{extraopts} --tt '#{TEST_TITLE}' --ta '#{TEST_ARTIST}' --tl '#{TEST_ALBUM}' --tn '#{TEST_TRACK}'" \
+         if tag
+
+      exit -1 if not system("bzcat #{ARGV[0]} | lame #{extraopts} -f - #{@tmp.path}")
    end
 end
 
