@@ -41,7 +41,8 @@
     "<commentsframe.h>",
     "<relativevolumeframe.h>",
     "<uniquefileidentifierframe.h>",
-    "<unknownframe.h>"
+    "<unknownframe.h>",
+    "<mpegheader.h>"
   ],
   namespaces: [
     { name: "TagLib",
@@ -324,6 +325,28 @@
             { name: "protectionEnabled", return: "bool" },
             { name: "isCopyrighted", return: "bool", aliases: [ "copyrighted?" ] },
             { name: "isOriginal", return: "bool", aliases: [ "original?" ] }
+          ]
+        },
+        { name: "Header",
+          methods: [
+            { name: "isValid", return: "bool", aliases: [ "valid?" ] },
+            { name: "version", return: "int" },
+            { name: "layer", return: "int" },
+            { name: "protectionEnabled", return: "int", aliases: [ "protectionEnabled?" ] },
+            { name: "bitrate", return: "int" },
+            { name: "sampleRate", return: "int" },
+            { name: "isPadded", return: "int", aliases: [ "padded?" ] },
+            { name: "channelMode", return: "int" },
+            { name: "isCopyrighted", return: "bool", aliases: [ "copyrighted?" ] },
+            { name: "isOriginal", return: "bool", aliases: [ "original?" ] },
+            { name: "frameLength", return: "int" }
+          ],
+          constants: [
+            # These are from Version enum
+            { name: "Version1" }, { name: "Version2" }, { name: "Version2_5" },
+            # These are from CHannelMode enum
+            { name: "Stereo" }, { name: "JointStereo" }, { name: "DualChannel" },
+            { name: "SingleChannel" }
           ]
         }
       ]
