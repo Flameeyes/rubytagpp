@@ -176,10 +176,10 @@
           methods: [
             { name: "majorVersion", return: "uint" },
             { name: "revisionNumber", return: "uint" },
-            { name: "unsynchronisation", return: "bool" },
-            { name: "extendedHeader", return: "bool" },
-            { name: "experimentalIndicator", return: "bool" },
-            { name: "footerPresent", return: "bool" },
+            { name: "unsynchronisation", return: "bool", aliases: [ "unsynchronisation?" ] },
+            { name: "extendedHeader", return: "bool", aliases: [ "extended_header?" ] },
+            { name: "experimentalIndicator", return: "bool", aliases: [ "experimental_indicator?" ] },
+            { name: "footerPresent", return: "bool", aliases: [ "has_footer?" ] },
             { name: "tagSize", return: "uint" },
             { name: "completeTagSize", return: "uint" },
             { name: "setTagSize", params: [ {name: "s", type: "uint"} ] }
