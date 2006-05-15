@@ -17,6 +17,7 @@ puts %@
 	Channels: #{file.audio_properties.channels} (should be #{Converter::CHANNELS})
 	Length: #{file.audio_properties.length} (should be #{Converter::LENGTH})
 	Bitrate: #{file.audio_properties.bitrate} (should be #{MP3Converter::BITRATE})
+	Version: #{file.audio_properties.version} (just informational)
 	Layer: #{file.audio_properties.layer} (should be #{MP3Converter::LAYER})
 	Protection: #{file.audio_properties.protection_enabled} (should be #{MP3Converter::PROTECTION})
 	Copyrighted: #{file.audio_properties.copyrighted?} (should be #{MP3Converter::COPYRIGHTED})
