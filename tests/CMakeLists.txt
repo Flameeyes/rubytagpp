@@ -29,6 +29,7 @@ ADD_TEST(vorbiswrite-fields ${RUNTEST_COMMAND} test-vorbiswrite-fields.rb ${CMAK
 
 ADD_TEST(flacbasic ${RUNTEST_COMMAND} test-flacbasic.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
 ADD_TEST(flactags ${RUNTEST_COMMAND} test-flactags.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
+ADD_TEST(flacproperties ${RUNTEST_COMMAND} test-flacproperties.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
 ADD_TEST(flacfileref ${RUNTEST_COMMAND} test-flacfileref.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
 ADD_TEST(flacwrite ${RUNTEST_COMMAND} test-flacwrite.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
 ADD_TEST(flacwrite-id3v2 ${RUNTEST_COMMAND} test-flacwrite-id3v2.rb ${CMAKE_CURRENT_SOURCE_DIR}/emptywave.wav.bz2)
