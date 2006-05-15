@@ -125,6 +125,12 @@
               params: [ {name: "create", type: "bool", optional: "yes"} ]
             }
           ]
+        },
+        { name: "Properties",
+          parent: "TagLib::AudioProperties",
+          methods: [
+            { name: "sampleWidth", type: "int" }
+          ]
         }
       ]
     },
