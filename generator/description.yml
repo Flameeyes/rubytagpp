@@ -208,6 +208,7 @@
     { name: "TagLib::APE",
       classes: [
         { name: "Item",
+          standalone: "yes",
           methods: [
             { name: "key", return: "String" },
             { name: "value", return: "ByteVector" },
