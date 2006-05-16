@@ -62,9 +62,20 @@ static inline TagLib::String ruby2String(VALUE rval)
     return TagLib::String(StringValuePtr(rval));
 }
 
+static inline TagLib::ByteVector ruby2ByteVector(VALUE rval)
+{
+    Check_Type(rval, T_STRING);
+    return TagLib::ByteVector(StringValuePtr(rval), RSTRING(rval)->len);
+}
+
 static inline TagLib::AudioProperties::ReadStyle ruby2TagLib_AudioProperties_ReadStyle(VALUE rval)
 {
     return (TagLib::AudioProperties::ReadStyle)ruby2int(rval);
+}
+
+static inline TagLib::APE::Item::ItemTypes ruby2TagLib_APE_Item_ItemTypes(VALUE rval)
+{
+    return (TagLib::APE::Item::ItemTypes)ruby2int(rval);
 }
 
 template<typename T> static VALUE cxx2ruby(TagLib::List<T> list)
