@@ -21,6 +21,12 @@ class Class
    attr_reader :ns, :name, :children
    @@classes = Hash.new
 
+   def Class.new_virtual_variable(cls, setter, getter, variable, type)
+      res = Array.new
+      res << ClassMethod.new(cls, setter, { "name" => setter, "bindname" => variable+"=", "params" => [ "name" => "value", "type" => type ] })
+      res << ClassMethod.new(cls, getter, { "name" => getter, "bindname" => variable, "return" => type })
+   end
+
    def initialize(ns, name, content)
       @ns = ns
       @name = name
@@ -55,14 +61,7 @@ class Class
 
       if content["attributes"]
          content["attributes"].each_pair { |atname, atcont|
-            setmethod = ClassMethod.new(self, atcont["funcset"], nil, "#{atname}=")
-            getmethod = ClassMethod.new(self, atcont["funcget"], nil, atname)
-
-            getmethod.return = atcont["type"]
-            setmethod.params << Parameter.new(atcont["type"], "value", false)
-
-            @methods << setmethod
-            @methods << getmethod
+            @methods.concat(Class.new_virtual_variable(self, atcont["funcset"], atcont["funcget"], atname, atcont["type"]))
          }
       end
    end

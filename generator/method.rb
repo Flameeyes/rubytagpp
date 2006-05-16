@@ -15,48 +15,20 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+require "function.rb"
+
 module CxxBindingsGenerator
 
-class ClassMethod
+class ClassMethod < Function
    attr_reader :return, :params
    attr_writer :return, :params
 
-   def initialize(cls, name, content, bindname = nil)
-      @params = Array.new
+   def initialize(cls, name, content)
+      retval = content["return"] ? content["return"] : "void"
+      bindname = content["bindname"] ? content["bindname"] : name
+      bindname = "initialize" if bindname == cls.name
 
-      @cls = cls
-      @name = name
-
-      if bindname
-         @bindname = bindname
-      else
-         @bindname = name
-      end
-
-      if @name == @cls.name
-         @bindname = "initialize"
-      end
-
-      if content
-         @return = content["return"]
-      else
-         @return = "void"
-      end
-
-      @vararg = false
-
-      @aliases = content["aliases"] if content
-
-      if content and content["params"]
-         content["params"].each { |p|
-            @params << Parameter.new(p["type"], p["name"], p["optional"] == "yes")
-            @vararg ||= (p["optional"] == "yes")
-         }
-      end
-   end
-
-   def varname
-      "f#{@cls.ns.name.gsub("::", "_")}_#{@cls.name}_#{@name}"
+      super(cls, name, content, retval, bindname)
    end
 
    def binding_prototype
@@ -71,19 +43,6 @@ class ClassMethod
       else
          prototype = "VALUE #{varname} ( int argc, VALUE *argv, VALUE self )"
       end
-   end
-
-   def params_conversion(nparms = nil)
-      return if @params.empty?
-      vararg = nparms != nil
-      nparms = @params.size unless nparms
-
-      ret = ""
-      @params.slice(0, nparms).each_index { |p|
-         ret << @params[p].conversion( vararg ? p : nil )
-      }
-
-      ret.chomp!(",")
    end
 
    def binding_stub
@@ -190,20 +149,6 @@ class ClassMethod
          unless nocamel_bindname == @bindname
 
       res
-   end
-end
-
-class Parameter
-   attr_reader :type, :name, :optional
-
-   def initialize(type, name, optional)
-      @type = type
-      @name = name
-      @optional = optional
-   end
-
-   def conversion(index = nil)
-      "ruby2#{@type.sub("*", "Ptr").gsub("::", "_")}(#{index ? "argv[#{index}]" : @name}),"
    end
 end
 
