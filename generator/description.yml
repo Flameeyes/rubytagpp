@@ -190,7 +190,6 @@
           ]
         },
         { name: "ExtendedHeader",
-          standalone: "yes",
           methods: [
             { name: "ExtendedHeader" },
             { name: "size", return: "uint" },
