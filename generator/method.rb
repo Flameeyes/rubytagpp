@@ -36,53 +36,46 @@ class ClassMethod < Function
       "f#{@cls.ns.name.gsub("::", "_")}_#{@cls.name}_#{@name}"
    end
 
+   def bind_call(param = nil)
+      call = "tmp->#{raw_call(param)}"
+      if @return == "void"
+         "#{call}; return Qnil;\n"
+      else
+         "return cxx2ruby(#{call});\n"
+      end
+   end
+
    def binding_stub
       if @bindname == "initialize"
          return constructor_stub
       end
 
       ret = %@
-#{binding_prototype} {
-   #{@cls.ns.name}::#{@cls.name}* tmp = ruby2#{@cls.varname}Ptr(self);
-   // fprintf(stderr, "Called #{@cls.ns.name}::#{@cls.name}::#{@name} for value %x (%p).\\n", self, tmp);
-   if ( ! tmp ) return Qnil; // The exception is thrown by ruby2*
+         #{binding_prototype} {
+            #{@cls.ns.name}::#{@cls.name}* tmp = ruby2#{@cls.varname}Ptr(self);
+            // fprintf(stderr, "Called #{@cls.ns.name}::#{@cls.name}::#{@name} for value %x (%p).\\n", self, tmp);
+            if ( ! tmp ) return Qnil; // The exception is thrown by ruby2*
 
-  @
+         @
 
-      unless @vararg
-         if @return and @return != "void"
-            ret << "return cxx2ruby(tmp->#{@name}(#{params_conversion}));\n"
-         else
-            ret << "tmp->#{@name}(#{params_conversion}); return Qnil;\n"
-         end
-      else
+      if @vararg
          ret << %@
             switch(argc)
             {
             @
 
          for n in 0..(@params.size-1)
-            if @params[n].optional
-               ret << "case #{n}: "
-               if @return and @return != "void"
-                  ret << "return cxx2ruby(tmp->#{@name}(#{params_conversion(n)}));\n"
-               else
-                  ret << "tmp->#{@name}(#{params_conversion(n)}); return Qnil;\n"
-               end
-            end
+            ret << "case #{n}: #{bind_call(n)}" if @params[n].optional
          end
 
-         ret << "case #{@params.size}: "
-         if @return and @return != "void"
-            ret << "return cxx2ruby(tmp->#{@name}(#{params_conversion(@params.size)}));\n"
-         else
-            ret << "tmp->#{@name}(#{params_conversion(@params.size)}); return Qnil;\n"
-         end
+         ret << "case #{@params.size}: #{bind_call(@params.size)};"
 
          ret << %@
                default: rb_raise(rb_eArgError, "Mantatory parameters missing"); return Qnil;
             } // switch
             @
+      else
+         ret << bind_call
       end
 
       ret << "}\n"

@@ -72,6 +72,9 @@ class Function
       end
    end
 
+   def raw_call(param = nil)
+      "#{@name}(#{params_conversion(param)})"
+   end
 end
 
 class Parameter
