@@ -36,13 +36,8 @@ class ClassMethod < Function
       "f#{@cls.ns.name.gsub("::", "_")}_#{@cls.name}_#{@name}"
    end
 
-   def bind_call(param = nil)
-      call = "tmp->#{raw_call(param)}"
-      if @return == "void"
-         "#{call}; return Qnil;\n"
-      else
-         "return cxx2ruby(#{call});\n"
-      end
+   def raw_call(param = nil)
+      "tmp->#{super(param)}"
    end
 
    def binding_stub
