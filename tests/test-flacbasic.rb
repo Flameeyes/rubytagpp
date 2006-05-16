@@ -8,8 +8,6 @@ cvt = FlacConverter.new
 file = TagLib::FLAC::File.new(cvt.path)
 exit -3 unless file.open?
 
-exit -4 unless file.tag
-
 puts %@
 	Title: "#{file.tag.title}" (should be "#{Converter::TEST_TITLE}")
 	Album: "#{file.tag.album}" (should be "#{Converter::TEST_ALBUM}")
