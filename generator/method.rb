@@ -31,20 +31,6 @@ class ClassMethod < Function
       super(cls, name, content, retval, bindname)
    end
 
-   def binding_prototype
-      unless @vararg
-         prototype = "VALUE #{varname} ( VALUE self"
-
-         @params.each { |p|
-            prototype << ", VALUE #{p.name}"
-         }
-
-         prototype << " )"
-      else
-         prototype = "VALUE #{varname} ( int argc, VALUE *argv, VALUE self )"
-      end
-   end
-
    def binding_stub
       if @bindname == "initialize"
          return constructor_stub

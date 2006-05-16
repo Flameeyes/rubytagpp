@@ -61,6 +61,18 @@ class Function
       ret.chomp!(",")
    end
 
+   def binding_prototype
+      if @vararg
+         prototype = "VALUE #{varname} ( int argc, VALUE *argv, VALUE self )"
+      else
+         prototype = "VALUE #{varname} ( VALUE self"
+
+         @params.each { |p| prototype << ", VALUE #{p.name}" }
+
+         prototype << " )"
+      end
+   end
+
 end
 
 class Parameter
