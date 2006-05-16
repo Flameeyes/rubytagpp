@@ -44,7 +44,8 @@
     "<unknownframe.h>",
     "<mpegheader.h>",
     "<apefooter.h>",
-    "<id3v2footer.h>"
+    "<id3v2footer.h>",
+    "<id3v2extendedheader.h>"
   ],
   namespaces: [
     { name: "TagLib",
@@ -188,6 +189,14 @@
             { name: "setTagSize", params: [ {name: "s", type: "uint"} ] }
           ]
         },
+        { name: "ExtendedHeader",
+          standalone: "yes",
+          methods: [
+            { name: "ExtendedHeader" },
+            { name: "size", return: "uint" },
+            { name: "setData", params: [ {name: "data", type: "ByteVector" } ] }
+          ]
+        },
         { name: "Footer",
           methods: [
             { name: "Footer" },
@@ -200,6 +209,7 @@
             { name: "frameList", return: "FrameList" },
             { name: "frameListMap", return: "FrameListMap" },
             { name: "header", return: "Header*" },
+            { name: "extendedHeader", return: "ExtendedHeader*" },
             { name: "footer", return: "Footer*" }
           ]
         }
