@@ -68,16 +68,6 @@ static inline TagLib::ByteVector ruby2ByteVector(VALUE rval)
     return TagLib::ByteVector(StringValuePtr(rval), RSTRING(rval)->len);
 }
 
-static inline TagLib::AudioProperties::ReadStyle ruby2TagLib_AudioProperties_ReadStyle(VALUE rval)
-{
-    return (TagLib::AudioProperties::ReadStyle)ruby2int(rval);
-}
-
-static inline TagLib::APE::Item::ItemTypes ruby2TagLib_APE_Item_ItemTypes(VALUE rval)
-{
-    return (TagLib::APE::Item::ItemTypes)ruby2int(rval);
-}
-
 template<typename T> static VALUE cxx2ruby(TagLib::List<T> list)
 {
     VALUE rubyarray = rb_ary_new2(list.size());

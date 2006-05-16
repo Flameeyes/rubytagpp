@@ -56,7 +56,8 @@
           ],
           constants: [
             { name: "Fast" }, { name: "Average"}, { name: "Accurate" }
-          ]
+          ],
+          enums: [ "ReadStyle" ]
         },
         { name: "File",
           methods: [
@@ -225,7 +226,8 @@
           ],
           constants: [
             {name: "Text"}, {name: "Binary"}, {name: "Locator"}
-          ]
+          ],
+          enums: [ "ItemTypes" ]
         },
         { name: "Tag",
           parent: "TagLib::Tag",

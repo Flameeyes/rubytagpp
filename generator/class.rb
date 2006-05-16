@@ -49,6 +49,8 @@ class Class
          }
       end
 
+      @enums = content["enums"]
+
       if content["attributes"]
          content["attributes"].each_pair { |atname, atcont|
             setmethod = ClassMethod.new(self, atcont["funcset"], nil, "#{atname}=")
@@ -98,6 +100,14 @@ class Class
       @methods.each { |method|
          ret << "#{method.binding_prototype};\n"
       }
+
+      if @enums
+         @enums.each { |enum|
+            ret << %@
+               static inline #{@ns.name}::#{@name}::#{enum} ruby2#{varname}_#{enum}(VALUE rval);
+            @
+         }
+      end
 
       ret << "\n"
    end
@@ -218,6 +228,16 @@ static VALUE #{varname}_alloc(VALUE self) {
       end
 
       @methods.each { |method| ret << method.binding_stub }
+
+      if @enums
+         @enums.each { |enum|
+            ret << %@
+               static inline #{@ns.name}::#{@name}::#{enum} ruby2#{varname}_#{enum}(VALUE rval) {
+                  return static_cast<#{@ns.name}::#{@name}::#{enum}>(ruby2int(rval));
+               }
+            @
+         }
+      end
       ret << "\n"
    end
 
