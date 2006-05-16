@@ -74,18 +74,14 @@ class ClassMethod
    end
 
    def params_conversion(nparms = nil)
-      return unless @params
+      return if @params.empty?
+      vararg = nparms != nil
+      nparms = @params.size unless nparms
 
       ret = ""
-      unless nparms
-         @params.each { |p|
-            ret << p.conversion
-         }
-      else
-         @params.slice(0, nparms).each_index { |p|
-            ret << @params[p].conversion(p)
-         }
-      end
+      @params.slice(0, nparms).each_index { |p|
+         ret << @params[p].conversion( vararg ? p : nil )
+      }
 
       ret.chomp!(",")
    end
