@@ -42,7 +42,8 @@
     "<relativevolumeframe.h>",
     "<uniquefileidentifierframe.h>",
     "<unknownframe.h>",
-    "<mpegheader.h>"
+    "<mpegheader.h>",
+    "<apefooter.h>"
   ],
   namespaces: [
     { name: "TagLib",
@@ -228,6 +229,28 @@
             {name: "Text"}, {name: "Binary"}, {name: "Locator"}
           ],
           enums: [ "ItemTypes" ]
+        },
+        { name: "Footer",
+          methods: [
+            { name: "Footer",
+              params: [
+                {name: "data", type: "ByteVector", optional: "yes"}
+              ]
+            },
+            { name: "version", return: "uint" },
+            { name: "headerPresent", return: "bool", aliases: [ "has_header?" ] },
+            { name: "footerPresent", return: "bool", aliases: [ "has_footer?" ] },
+            { name: "isHeader", return: "bool", aliases: [ "header?" ] },
+            { name: "setHeaderPresent", params: [ { name: "s", type: "bool"} ] },
+            { name: "itemCount", return: "uint" },
+            { name: "setItemCount", params: [ { name: "s", type: "uint"} ] },
+            { name: "tagSize", return: "uint" },
+            { name: "completeTagSize", return: "uint" },
+            { name: "setTagSize", params: [ { name: "s", type: "uint" } ] },
+            { name: "setData", params: [ { name: "data", type: "ByteVector" } ] },
+            { name: "renderFooter", return: "String" },
+            { name: "renderHeader", return: "String" }
+          ]
         },
         { name: "Tag",
           parent: "TagLib::Tag",
