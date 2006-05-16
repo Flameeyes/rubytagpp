@@ -205,11 +205,20 @@
         { name: "Tag",
           parent: "TagLib::Tag",
           methods: [
-            { name: "frameList", return: "FrameList" },
-            { name: "frameListMap", return: "FrameListMap" },
             { name: "header", return: "Header*" },
             { name: "extendedHeader", return: "ExtendedHeader*" },
-            { name: "footer", return: "Footer*" }
+            { name: "footer", return: "Footer*" },
+            { name: "frameListMap", return: "FrameListMap" },
+            { name: "frameList", return: "FrameList", params: [ {name: "id", type: "ByteVector", optional: "yes" } ] },
+            { name: "addFrame", params: [ {name: "frame", type: "TagLib::ID3v2::Frame*" } ] },
+            { name: "removeFrame",
+              params: [
+                { name: "frame", type: "TagLib::ID3v2::Frame*" },
+                { name: "del", type: "bool", optional: "yes" }
+              ]
+            },
+            { name: "removeFrames", params: [ {name: "id", type: "ByteVector"} ] },
+            { name: "render", return: "ByteVector" }
           ]
         }
       ]
