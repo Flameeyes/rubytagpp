@@ -93,7 +93,7 @@ class ClassMethod
 
       ret = %@
 #{binding_prototype} {
-   #{@cls.ns.name}::#{@cls.name}* tmp = ruby2#{@cls.varname}(self);
+   #{@cls.ns.name}::#{@cls.name}* tmp = ruby2#{@cls.varname}Ptr(self);
    // fprintf(stderr, "Called #{@cls.ns.name}::#{@cls.name}::#{@name} for value %x (%p).\\n", self, tmp);
    if ( ! tmp ) return Qnil; // The exception is thrown by ruby2*
 
