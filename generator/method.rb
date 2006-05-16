@@ -74,15 +74,17 @@ class ClassMethod
    end
 
    def params_conversion(nparms = nil)
+      return unless @params
+
       ret = ""
       unless nparms
          @params.each { |p|
-            ret << " ruby2#{p.type.sub("*", "Ptr").gsub("::", "_")}(#{p.name}),"
-         } if @params
+            ret << p.conversion
+         }
       else
          @params.slice(0, nparms).each_index { |p|
-            ret << " ruby2#{@params[p].type.sub("*", "Ptr").gsub("::", "_")}(argv[#{p}]),"
-         } if @params
+            ret << @params[p].conversion(p)
+         }
       end
 
       ret.chomp!(",")
@@ -202,6 +204,10 @@ class Parameter
       @type = type
       @name = name
       @optional = optional
+   end
+
+   def conversion(index = nil)
+      "ruby2#{@type.sub("*", "Ptr").gsub("::", "_")}(#{index ? "argv[#{index}]" : @name}),"
    end
 end
 
