@@ -207,8 +207,45 @@
     },
     { name: "TagLib::APE",
       classes: [
+        { name: "Item",
+          methods: [
+            { name: "key", return: "String" },
+            { name: "value", return: "ByteVector" },
+            { name: "size", return: "int" },
+            { name: "toString", return: "String", aliases: [ "to_s" ] },
+            { name: "toStringList", return: "StringList" },
+            { name: "render", return: "ByteVector" },
+            { name: "parse", params: [ { name: "data", type: "ByteVector" } ] },
+            { name: "setReadOnly", params: [ { name: "readOnly", type: "bool" } ] },
+            { name: "isReadOnly", return: "bool", aliases: [ "readOnly?" ] },
+            { name: "setType", params: [ { name: "type", type: "TagLib::APE::Item::ItemTypes" } ] },
+            { name: "type", return: "int" },
+            { name: "isEmpty", return: "bool", aliases: [ "empty?" ] }
+          ],
+          constants: [
+            {name: "Text"}, {name: "Binary"}, {name: "Locator"}
+          ]
+        },
         { name: "Tag",
-          parent: "TagLib::Tag"
+          parent: "TagLib::Tag",
+          methods: [
+            { name: "render", return: "ByteVector" },
+            { name: "itemListMap", return: "ItemListMap" },
+            { name: "removeItem", params: [ {name: "key", type: "String"} ] },
+            { name: "addValue",
+              return: "void", params: [
+                {name: "key", type: "String"},
+                {name: "value", type: "String"},
+                {name: "replace", type: "bool", optional: "yes"}
+              ]
+            },
+            { name: "setItem",
+              return: "void", params: [
+                {name: "key", type: "String"},
+                {name: "value", type: "TagLib::APE::Item"}
+              ]
+            }
+          ]
         }
       ]
     },
