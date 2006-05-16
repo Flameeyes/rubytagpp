@@ -43,7 +43,8 @@
     "<uniquefileidentifierframe.h>",
     "<unknownframe.h>",
     "<mpegheader.h>",
-    "<apefooter.h>"
+    "<apefooter.h>",
+    "<id3v2footer.h>"
   ],
   namespaces: [
     { name: "TagLib",
@@ -187,12 +188,19 @@
             { name: "setTagSize", params: [ {name: "s", type: "uint"} ] }
           ]
         },
+        { name: "Footer",
+          methods: [
+            { name: "Footer" },
+            { name: "render", return: "ByteVector", params: [ {name: "header", type: "TagLib::ID3v2::Header*"} ] }
+          ]
+        },
         { name: "Tag",
           parent: "TagLib::Tag",
           methods: [
             { name: "frameList", return: "FrameList" },
             { name: "frameListMap", return: "FrameListMap" },
-            { name: "header", return: "Header*" }
+            { name: "header", return: "Header*" },
+            { name: "footer", return: "Footer*" }
           ]
         }
       ]
