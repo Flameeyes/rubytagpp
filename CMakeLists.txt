@@ -16,6 +16,7 @@ ADD_CUSTOM_COMMAND(
 		${GENERATOR_PATH}/generator.rb ${GENERATOR_PATH}/description.yml
 	DEPENDS ${GENERATOR_PATH}/generator.rb ${GENERATOR_PATH}/class.rb
 		${GENERATOR_PATH}/method.rb ${GENERATOR_PATH}/namespace.rb
+		${GENERATOR_PATH}/function.rb
 		${GENERATOR_PATH}/description.yml
 )
 
