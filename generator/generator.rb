@@ -29,7 +29,7 @@ bindings = description["bindings"]
 
 description["namespaces"].each do |ns|
    puts "Error in parsing description file, unnamed namespace." unless ns["name"]
-   namespaces << Namespace.new(ns["name"], ns)
+   namespaces << CxxBindingsGenerator::Namespace.new(ns["name"], ns)
 end
 
 header = File.new("#{bindings}.h", "w")
