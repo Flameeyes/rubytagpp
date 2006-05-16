@@ -19,10 +19,9 @@ module CxxBindingsGenerator
 
 class Function
 
-   def initialize(cls, name, content, retval = "void", bindname = nil)
+   def initialize(name, content, retval = "void", bindname = nil)
       @params = Array.new
 
-      @cls = cls
       @name = name
 
       @bindname = bindname ? bindname : name
@@ -45,7 +44,7 @@ class Function
    end
 
    def varname
-      "f#{@cls.ns.name.gsub("::", "_")}_#{@cls.name}_#{@name}"
+      "f#{@name}"
    end
 
    def params_conversion(nparms = nil)

@@ -28,7 +28,12 @@ class ClassMethod < Function
       bindname = content["bindname"] ? content["bindname"] : name
       bindname = "initialize" if bindname == cls.name
 
-      super(cls, name, content, retval, bindname)
+      @cls = cls
+      super(name, content, retval, bindname)
+   end
+
+   def varname
+      "f#{@cls.ns.name.gsub("::", "_")}_#{@cls.name}_#{@name}"
    end
 
    def binding_stub
