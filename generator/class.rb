@@ -30,6 +30,12 @@ class Class
 
       @children = Array.new
 
+      if content["standalone"]
+         @standalone = (content["standalone"] == "yes")
+      else
+         @standalone = false
+      end
+
       if content["methods"]
          content["methods"].each { |method|
             @methods << ClassMethod.new(self, method["name"], method)
@@ -70,14 +76,23 @@ class Class
    end
 
    def header
-      ret = "extern VALUE c#{varname};\n" \
-         "VALUE cxx2ruby(#{@ns.name}::#{@name}* instance);\n"
+      ret = %@
+         extern VALUE c#{varname};
+         VALUE cxx2ruby(#{@ns.name}::#{@name}* instance);
+      @
 
       unless @parent
-         ret << \
-            "typedef std::map<VALUE, #{@ns.name}::#{@name}*> T#{ptrmap};\n" \
-            "extern T#{ptrmap} #{ptrmap};\n" \
-            "static void #{varname}_free(void *p);\n"
+         ret << %@
+            typedef std::map<VALUE, #{@ns.name}::#{@name}*> T#{ptrmap};
+            extern T#{ptrmap} #{ptrmap};
+            static void #{varname}_free(void *p);
+         @
+      end
+
+      if @standalone
+         ret << %@
+            VALUE cxx2ruby(const #{@ns.name}::#{@name}& object);
+         @
       end
 
       @methods.each { |method|
@@ -134,7 +149,7 @@ static void #{varname}_free(void *p) {
 
       ret << %@
 
-#{@ns.name}::#{@name}* ruby2#{varname}(VALUE rval) {
+#{@ns.name}::#{@name}* ruby2#{varname}Ptr(VALUE rval) {
    #{@ns.name}::#{@name}* ptr;
    Data_Get_Struct(rval, #{@ns.name}::#{@name}, ptr);
 
@@ -175,8 +190,32 @@ VALUE cxx2ruby(#{@ns.name}::#{@name}* instance) {
 static VALUE #{varname}_alloc(VALUE self) {
    return Data_Wrap_Struct(self, 0, #{function_free}, 0);
 }
-
 @
+
+      if @standalone
+         ret << %@
+            #{@ns.name}::#{@name} ruby2#{varname}(VALUE rval) {
+               #{@ns.name}::#{@name}* ptr;
+               Data_Get_Struct(rval, #{@ns.name}::#{@name}, ptr);
+
+               if ( ptr ) return *(dynamic_cast<#{@ns.name}::#{@name}*>(ptr));
+
+               return #{@ns.name}::#{@name}();
+            }
+
+            VALUE cxx2ruby(const #{@ns.name}::#{@name} &object) {
+               #{@ns.name}::#{@name}* instance = new #{@ns.name}::#{@name}(object);
+               VALUE klass = c#{varname};
+
+            #{test_children}
+
+               VALUE rval = Data_Wrap_Struct(klass, 0, #{function_free}, (void*)instance);
+               #{ptrmap}[rval] = instance;
+               // fprintf(stderr, "Wrapping instance %p in value %x (type %d)\\n", instance, rval, TYPE(rval));
+               return rval;
+            }
+         @
+      end
 
       @methods.each { |method| ret << method.binding_stub }
       ret << "\n"
