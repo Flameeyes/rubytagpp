@@ -143,12 +143,18 @@
       classes: [
         { name: "Frame",
           methods: [
-            { name: "frameID", type: "ByteVector" },
+            { name: "frameID", return: "ByteVector" },
             { name: "size", return: "uint" },
             { name: "setData", params: [ {name: "data", type: "ByteVector"} ] },
             { name: "setText", params: [ {name: "text", type: "String"} ] },
             { name: "toString", aliases: [ "to_s" ] },
             { name: "render", return: "ByteVector" }
+          ],
+          singletons: [
+            { name: "headerSize", return: "uint",
+              params: [ {name: "version", type: "uint"} ] },
+            { name: "textDelimiter", return "ByteVector",
+              params: [ {name: "t", type: "String::Type" } ] }
           ]
         },
         { name: "TextIdentificationFrame",
