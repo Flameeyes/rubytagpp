@@ -27,20 +27,29 @@ description = YAML::load(File.new(ARGV[0]).read)
 namespaces = Array.new
 bindings = description["bindings"]
 
+$templates = Hash.new
+if description.has_key?("templates")
+  description["templates"].each do |tmpl|
+    $templates[tmpl["name"]] = {
+      :name => tmpl["name"],
+      :prototype => tmpl["prototype"],
+      :function => tmpl["function"],
+      :paramcount => tmpl["paramcount"]
+    }
+  end
+end
+
 description["namespaces"].each do |ns|
    puts "Error in parsing description file, unnamed namespace." unless ns["name"]
    namespaces << CxxBindingsGenerator::Namespace.new(ns["name"], ns)
 end
 
-header = File.new("#{bindings}.h", "w")
-unit = File.new("#{bindings}.cpp", "w")
+header = File.new("#{bindings}.hh", "w")
+unit = File.new("#{bindings}.cc", "w")
 
 header.puts %@
-#ifdef __GNUC__
-# pragma GCC visibility push(default)
-#endif
-
 #include <ruby.h>
+#include <map> /* This is for the ptrMap */
 
 @
 
@@ -48,23 +57,9 @@ description["includes"].each do |libincl|
    header.puts "#include #{libincl}"
 end
 
-header.puts %@
-#ifdef __GNUC__
-# pragma GCC visibility pop
-#endif
-
-#ifdef __GNUC__
-# pragma GCC visibility push(hidden)
-#endif
-@
-
 unit.puts %@
-#include "#{bindings}.h"
-#include "conversions.h"
-
-#ifdef __GNUC__
-# pragma GCC visibility push(hidden)
-#endif
+#include "#{bindings}.hh"
+#include "conversions.hh"
 @
 
 namespaces.each { |ns|
@@ -72,22 +67,11 @@ namespaces.each { |ns|
    unit.puts(ns.unit)
 }
 
-header.puts %@
-#ifdef __GNUC__
-# pragma GCC visibility pop
-#endif
-
-@
-
 unit.puts %@
-#ifdef __GNUC__
-# pragma GCC visibility pop
-#endif
-
 extern "C" {
 
-#ifdef __GNUC__
-# pragma GCC visibility push(default)
+#ifdef HAVE_VISIBILITY
+void Init_#{bindings}() __attribute__((visibility("default")));
 #endif
 
 void Init_#{bindings}() {
@@ -99,10 +83,6 @@ namespaces.each { |ns|
 
 unit.puts %@
 } /* Init_#{bindings} */
-
-#ifdef __GNUC__
-# pragma GCC visibility pop
-#endif
 
 } /* extern C */
 @

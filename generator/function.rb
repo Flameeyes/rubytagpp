@@ -35,10 +35,17 @@ class Function
 
       @aliases = content["aliases"]
 
+      @template = content["template"] ? $templates[content["template"]] : nil
+
+      @custom = content["custom"] == "yes"
+      @custom_prototype = content["custom_prototype"]
+      @custom_name = content["custom_name"]
+      @custom_paramcount = content["custom_paramcount"]
+
       if content["params"]
          content["params"].each { |p|
-            @params << Parameter.new(p["type"], p["name"], p["optional"] == "yes")
-            @vararg ||= (p["optional"] == "yes")
+            @params << Parameter.new(p["type"], p["name"], p["optional"] == "yes", p["default"])
+            @vararg ||= ( (p["optional"] == "yes") or (p["default"] != nil) )
          }
       end
    end
@@ -47,7 +54,7 @@ class Function
       "f#{@name}"
    end
 
-   def params_conversion(nparms = nil)
+   def params_conversion(nparms = nil, params = nil)
       return if @params.empty?
       vararg = nparms != nil
       nparms = @params.size unless nparms
@@ -56,43 +63,47 @@ class Function
       @params.slice(0, nparms).each_index { |p|
          ret << @params[p].conversion( vararg ? p : nil )
       }
+      ret << "#{params[0]}," if params
 
       ret.chomp!(",")
    end
 
    def binding_prototype
-      if @vararg
-         prototype = "VALUE #{varname} ( int argc, VALUE *argv, VALUE self )"
-      else
-         prototype = "VALUE #{varname} ( VALUE self"
-
-         @params.each { |p| prototype << ", VALUE #{p.name}" }
-
-         prototype << " )"
-      end
+     return @template[:prototype].gsub('#{varname}', varname) if @template
+     return @custom_prototype if @custom
+     if @vararg
+       prototype = "VALUE #{varname} ( int argc, VALUE *argv, VALUE self )"
+     else
+       prototype = "VALUE #{varname} ( VALUE self"
+       
+       @params.each { |p| prototype << ", VALUE #{p.name}" }
+       
+       prototype << " )"
+     end
    end
 
-   def raw_call(param = nil)
+   def raw_call(param = nil, params = nil)
       "#{@name}(#{params_conversion(param)})"
    end
 
-   def bind_call(param = nil)
+   def bind_call(param = nil, params = nil)
       if @return == "void"
          "#{raw_call(param)}; return Qnil;\n"
       else
-         "return cxx2ruby(#{raw_call(param)});\n"
+        "return cxx2ruby((#{@return})#{raw_call(param)});\n"
       end
    end
 
 end
 
 class Parameter
-   attr_reader :type, :name, :optional
+   attr_reader :type, :name, :optional, :default
 
-   def initialize(type, name, optional)
+   def initialize(type, name, optional, default)
       @type = type
       @name = name
       @optional = optional
+      @default = default
    end
 
    def conversion(index = nil)

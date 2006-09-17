@@ -33,7 +33,11 @@ class ClassMethod < Function
    end
 
    def varname
-      "f#{@cls.ns.name.gsub("::", "_")}_#{@cls.name}_#{@name}"
+     if @custom
+       @custom_name
+     else
+       "f#{@cls.ns.name.gsub("::", "_")}_#{@cls.name}_#{@name}"
+     end
    end
 
    def raw_call(param = nil)
@@ -41,14 +45,17 @@ class ClassMethod < Function
    end
 
    def binding_stub
+      return "" if @custom
+      return @template[:function].gsub('#{name}', @name).gsub('#{varname}', varname) if @template
+
       if @bindname == "initialize"
          return constructor_stub
       end
 
       ret = %@
          #{binding_prototype} {
-            #{@cls.ns.name}::#{@cls.name}* tmp = ruby2#{@cls.varname}Ptr(self);
-            // fprintf(stderr, "Called #{@cls.ns.name}::#{@cls.name}::#{@name} for value %x (%p).\\n", self, tmp);
+            #{@cls.ns.cxxname}::#{@cls.name}* tmp = ruby2#{@cls.varname}Ptr(self);
+            // fprintf(stderr, "Called #{@cls.ns.cxxname}::#{@cls.name}::#{@name} for value %x (%p).\\n", self, tmp);
             if ( ! tmp ) return Qnil; // The exception is thrown by ruby2*
 
          @
@@ -60,7 +67,8 @@ class ClassMethod < Function
             @
 
          for n in 0..(@params.size-1)
-            ret << "case #{n}: #{bind_call(n)}" if @params[n].optional
+           ret << "case #{n}: #{bind_call(n)}" if @params[n].optional
+           ret << "case #{n}: #{bind_call(n, [@params[n].default])}" if @params[n].default
          end
 
          ret << "case #{@params.size}: #{bind_call(@params.size)};"
@@ -79,11 +87,11 @@ class ClassMethod < Function
    def constructor_stub
       ret = %@
 #{binding_prototype} {
-   #{@cls.ns.name}::#{@cls.name}* tmp;
-   Data_Get_Struct(self, #{@cls.ns.name}::#{@cls.name}, tmp);
+   #{@cls.ns.cxxname}::#{@cls.name}* tmp;
+   Data_Get_Struct(self, #{@cls.ns.cxxname}::#{@cls.name}, tmp);
 @
       unless @vararg
-         ret << "tmp = new #{@cls.ns.name}::#{@cls.name}(#{params_conversion});"
+         ret << "tmp = new #{@cls.ns.cxxname}::#{@cls.name}(#{params_conversion});"
       else
          ret << %@
             switch(argc)
@@ -91,13 +99,12 @@ class ClassMethod < Function
 @
 
          for n in 0..(@params.size-1)
-            if @params[n].optional
-               ret << "case #{n}: tmp = new #{@cls.ns.name}::#{@cls.name}(#{params_conversion(n)}); break;\n"
-            end
+           ret << "case #{n}: tmp = new #{@cls.ns.cxxname}::#{@cls.name}(#{params_conversion(n)}); break;\n" if @params[n].optional
+           ret << "case #{n}: tmp = new #{@cls.ns.cxxname}::#{@cls.name}(#{params_conversion(n, [@params[n].default])}); break;\n" if @params[n].default
          end
 
          ret << %@
-               case #{@params.size}: tmp = new #{@cls.ns.name}::#{@cls.name}(#{params_conversion(@params.size)}); break;
+               case #{@params.size}: tmp = new #{@cls.ns.cxxname}::#{@cls.name}(#{params_conversion(@params.size)}); break;
                default: rb_raise(rb_eArgError, "Mandatory parameters missing (passed %d)\\n", argc); return Qnil;
             } // switch
             @
@@ -113,7 +120,13 @@ class ClassMethod < Function
    end
 
    def init
-      res = "rb_define_method(c#{@cls.varname}, \"#{@bindname}\", RUBY_METHOD_FUNC(#{varname}), #{@vararg ? "-1" : @params.length});\n"
+     if @custom
+       res = "rb_define_method(c#{@cls.varname}, \"#{@bindname}\", RUBY_METHOD_FUNC(#{varname}), #{@custom_paramcount});\n"
+     elsif @template
+       res = "rb_define_method(c#{@cls.varname}, \"#{@bindname}\", RUBY_METHOD_FUNC(#{varname}), #{@template[:paramcount]});\n"
+     else
+       res = "rb_define_method(c#{@cls.varname}, \"#{@bindname}\", RUBY_METHOD_FUNC(#{varname}), #{@vararg ? "-1" : @params.length});\n"
+     end
       if @aliases
          @aliases.each { |meth_alias|
             res << "rb_define_alias(c#{@cls.varname}, \"#{meth_alias}\", \"#{@bindname}\");\n"

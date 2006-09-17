@@ -4,7 +4,9 @@ DartTestfile.txt
 Makefile
 Testing
 cmake_install.cmake
-rubytag/rubytagpp.cpp
-rubytag/rubytagpp.h
+rubytag/rubytagpp.cc
+rubytag/rubytagpp.hh
 rubytagpp.so
-
+install_manifest.txt
+progress.make
+test/progress.make

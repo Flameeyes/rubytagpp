@@ -19,33 +19,7 @@
 {
   bindings: "rubytagpp",
   includes: [
-    "<taglib/taglib.h>",
-    "<taglib/tag.h>",
-    "<taglib/id3v1tag.h>",
-    "<taglib/id3v2tag.h>",
-    "<taglib/xiphcomment.h>",
-    "<taglib/apetag.h>",
-    "<taglib/tfile.h>",
-    "<taglib/flacfile.h>",
-    "<taglib/mpcfile.h>",
-    "<taglib/mpegfile.h>",
-    "<taglib/oggfile.h>",
-    "<taglib/oggflacfile.h>",
-    "<taglib/vorbisfile.h>",
-    "<taglib/vorbisproperties.h>",
-    "<taglib/fileref.h>",
-    "<tlist.h>",
-    "<id3v2frame.h>",
-    "<textidentificationframe.h>",
-    "<attachedpictureframe.h>",
-    "<commentsframe.h>",
-    "<relativevolumeframe.h>",
-    "<uniquefileidentifierframe.h>",
-    "<unknownframe.h>",
-    "<mpegheader.h>",
-    "<apefooter.h>",
-    "<id3v2footer.h>",
-    "<id3v2extendedheader.h>"
+    '"ruby-taglib.hh"'
   ],
   namespaces: [
     { name: "TagLib",
@@ -65,12 +39,12 @@
         { name: "File",
           methods: [
             { name: "name", return: "char*" },
-            { name: "tag", return: "Tag*" },
+            { name: "tag", return: "TagLib::Tag*" },
             { name: "save", return: "bool" },
             { name: "readOnly", return: "bool", aliases: [ "readOnly?" ] },
             { name: "isOpen", return: "bool", aliases: [ "open?" ] },
             { name: "isValid", return: "bool", aliases: [ "valid?" ] },
-            { name: "audioProperties", return: "TagLib::AudioProperties" }
+            { name: "audioProperties", return: "TagLib::AudioProperties*" }
           ]
         },
         { name: "Tag",
@@ -96,9 +70,9 @@
                 {name: "propertiesStyle", type: "TagLib::AudioProperties::ReadStyle", optional: "yes" }
               ]
             },
-            { name: "tag", return: "TagLib::Tag" },
-            { name: "audioProperties", return: "TagLib::AudioProperties" },
-            { name: "file", return: "TagLib::File" },
+            { name: "tag", return: "TagLib::Tag*" },
+            { name: "audioProperties", return: "TagLib::AudioProperties*" },
+            { name: "file", return: "TagLib::File*" },
             { name: "isNull", return: "bool", aliases: [ "null?" ] },
             { name: "save", return: "bool" }
           ]
@@ -118,15 +92,15 @@
               ]
             },
             { name: "ID3v2Tag",
-              return: "TagLib::ID3v2::Tag",
+              return: "TagLib::ID3v2::Tag*",
               params: [ {name: "create", type: "bool", optional: "yes"} ]
             },
             { name: "ID3v1Tag",
-              return: "TagLib::ID3v1::Tag",
+              return: "TagLib::ID3v1::Tag*",
               params: [ {name: "create", type: "bool", optional: "yes"} ]
             },
             { name: "xiphComment",
-              return: "TagLib::Ogg::XiphComment",
+              return: "TagLib::Ogg::XiphComment*",
               params: [ {name: "create", type: "bool", optional: "yes"} ]
             }
           ]
@@ -210,11 +184,11 @@
         { name: "Tag",
           parent: "TagLib::Tag",
           methods: [
-            { name: "header", return: "Header*" },
-            { name: "extendedHeader", return: "ExtendedHeader*" },
-            { name: "footer", return: "Footer*" },
-            { name: "frameListMap", return: "FrameListMap" },
-            { name: "frameList", return: "FrameList", params: [ {name: "id", type: "ByteVector", optional: "yes" } ] },
+            { name: "header", return: "TagLib::ID3v2::Header*" },
+            { name: "extendedHeader", return: "TagLib::ID3v2::ExtendedHeader*" },
+            { name: "footer", return: "TagLib::ID3v2::Footer*" },
+            { name: "frameListMap", return: "TagLib::ID3v2::FrameListMap" },
+            { name: "frameList", return: "TagLib::ID3v2::FrameList", params: [ {name: "id", type: "ByteVector", optional: "yes" } ] },
             { name: "addFrame", params: [ {name: "frame", type: "TagLib::ID3v2::Frame*" } ] },
             { name: "removeFrame",
               params: [
@@ -287,7 +261,7 @@
           parent: "TagLib::Tag",
           methods: [
             { name: "render", return: "ByteVector" },
-            { name: "itemListMap", return: "ItemListMap" },
+            { name: "itemListMap", return: "TagLib::APE::ItemListMap" },
             { name: "removeItem", params: [ {name: "key", type: "String"} ] },
             { name: "addValue",
               return: "void", params: [
@@ -321,7 +295,7 @@
                 {name: "replace", type: "bool", optional: "yes"}
               ]
             },
-            { name: "fieldListMap", return: "FieldListMap" }
+            { name: "fieldListMap", return: "TagLib::Ogg::FieldListMap" }
           ]
         }
       ]
@@ -351,7 +325,7 @@
                 {name: "propertiesStyle", type: "TagLib::AudioProperties::ReadStyle", optional: "yes" }
               ]
             },
-            { name: "audioProperties", return: "TagLib::Vorbis::Properties" }
+            { name: "audioProperties", return: "TagLib::Vorbis::Properties*" }
           ]
         }
       ]
@@ -398,15 +372,15 @@
               ]
             },
             { name: "ID3v2Tag",
-              return: "TagLib::ID3v2::Tag",
+              return: "TagLib::ID3v2::Tag*",
               params: [ {name: "create", type: "bool", optional: "yes"} ]
             },
             { name: "ID3v1Tag",
-              return: "TagLib::ID3v1::Tag",
+              return: "TagLib::ID3v1::Tag*",
               params: [ {name: "create", type: "bool", optional: "yes"} ]
             },
             { name: "APETag",
-              return: "TagLib::APE::Tag",
+              return: "TagLib::APE::Tag*",
               params: [ {name: "create", type: "bool", optional: "yes"} ]
             }
           ],
@@ -463,11 +437,11 @@
               ]
             },
             { name: "ID3v1Tag",
-              return: "TagLib::ID3v1::Tag",
+              return: "TagLib::ID3v1::Tag*",
               params: [ {name: "create", type: "bool", optional: "yes"} ]
             },
             { name: "APETag",
-              return: "TagLib::APE::Tag",
+              return: "TagLib::APE::Tag*",
               params: [ {name: "create", type: "bool", optional: "yes"} ]
             }
           ],

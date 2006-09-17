@@ -52,7 +52,7 @@ class Class
 
       if content["constants"]
          content["constants"].each { |constant|
-            constant["value"] = "#{@ns.name}::#{@name}::#{constant["name"]}"
+            constant["value"] = "#{@ns.cxxname}::#{@name}::#{constant["name"]}"
             @constants << constant
          }
       end
@@ -81,12 +81,13 @@ class Class
    def header
       ret = %@
          extern VALUE c#{varname};
-         VALUE cxx2ruby(#{@ns.name}::#{@name}* instance);
+         VALUE cxx2ruby(#{@ns.cxxname}::#{@name}* instance);
+         #{@ns.cxxname}::#{@name}* ruby2#{varname}Ptr(VALUE rval);
       @
 
       unless @parent
          ret << %@
-            typedef std::map<VALUE, #{@ns.name}::#{@name}*> T#{ptrmap};
+            typedef std::map<VALUE, #{@ns.cxxname}::#{@name}*> T#{ptrmap};
             extern T#{ptrmap} #{ptrmap};
             static void #{varname}_free(void *p);
          @
@@ -94,7 +95,7 @@ class Class
 
       if @standalone
          ret << %@
-            VALUE cxx2ruby(const #{@ns.name}::#{@name}& object);
+            VALUE cxx2ruby(const #{@ns.cxxname}::#{@name}& object);
          @
       end
 
@@ -105,7 +106,7 @@ class Class
       if @enums
          @enums.each { |enum|
             ret << %@
-               static inline #{@ns.name}::#{@name}::#{enum} ruby2#{varname}_#{enum}(VALUE rval);
+               static inline #{@ns.cxxname}::#{@name}::#{enum} ruby2#{varname}_#{enum}(VALUE rval);
             @
          }
       end
@@ -128,7 +129,7 @@ class Class
 
       @children.each { |klass|
          ret << %@
-if ( dynamic_cast<#{klass.ns.name}::#{klass.name}*>(instance) != NULL )
+if ( dynamic_cast< #{klass.ns.cxxname}::#{klass.name}* >(instance) != NULL )
 {
    klass = c#{klass.varname};
    #{klass.test_children}
@@ -149,10 +150,10 @@ T#{ptrmap} #{ptrmap};
 static void #{varname}_free(void *p) {
   T#{ptrmap}::iterator it, eend = #{ptrmap}.end();
   for(it = #{ptrmap}.begin(); it != eend; it++)
-     if ( (*it).second == (#{@ns.name}::#{@name}*)p ) {
+     if ( (*it).second == (#{@ns.cxxname}::#{@name}*)p ) {
         #{ptrmap}.erase(it); break;
      }
-  delete (#{@ns.name}::#{@name}*)p;
+  delete (#{@ns.cxxname}::#{@name}*)p;
 }
 
 @
@@ -160,29 +161,29 @@ static void #{varname}_free(void *p) {
 
       ret << %@
 
-#{@ns.name}::#{@name}* ruby2#{varname}Ptr(VALUE rval) {
-   #{@ns.name}::#{@name}* ptr;
-   Data_Get_Struct(rval, #{@ns.name}::#{@name}, ptr);
+#{@ns.cxxname}::#{@name}* ruby2#{varname}Ptr(VALUE rval) {
+   #{@ns.cxxname}::#{@name}* ptr;
+   Data_Get_Struct(rval, #{@ns.cxxname}::#{@name}, ptr);
 
-   if ( ptr ) return dynamic_cast<#{@ns.name}::#{@name}*>(ptr);
+   if ( ptr ) return dynamic_cast< #{@ns.cxxname}::#{@name}* >(ptr);
 
    T#{ptrmap}::iterator it = #{ptrmap}.find(rval);
 
    if ( it == #{ptrmap}.end() ) {
-      rb_raise(rb_eRuntimeError, "Unable to find #{@ns.name}::#{name} instance for value %x (type %d)\\n", rval, TYPE(rval));
+      rb_raise(rb_eRuntimeError, "Unable to find #{@ns.cxxname}::#{name} instance for value %x (type %d)\\n", rval, TYPE(rval));
       return NULL;
    }
 
-   return dynamic_cast<#{@ns.name}::#{@name}*>((*it).second);
+   return dynamic_cast< #{@ns.cxxname}::#{@name}* >((*it).second);
 }
 
-VALUE cxx2ruby(#{@ns.name}::#{@name}* instance) {
+VALUE cxx2ruby(#{@ns.cxxname}::#{@name}* instance) {
   if ( instance == NULL ) return Qnil;
 
   T#{ptrmap}::iterator it, eend = #{ptrmap}.end();
 
   for(it = #{ptrmap}.begin(); it != eend; it++)
-     if ( (*it).second == (#{@ns.name}::#{@name}*)instance ) break;
+     if ( (*it).second == (#{@ns.cxxname}::#{@name}*)instance ) break;
 
    if ( it != #{ptrmap}.end() )
       return (*it).first;
@@ -205,17 +206,17 @@ static VALUE #{varname}_alloc(VALUE self) {
 
       if @standalone
          ret << %@
-            #{@ns.name}::#{@name} ruby2#{varname}(VALUE rval) {
-               #{@ns.name}::#{@name}* ptr;
-               Data_Get_Struct(rval, #{@ns.name}::#{@name}, ptr);
+            #{@ns.cxxname}::#{@name} ruby2#{varname}(VALUE rval) {
+               #{@ns.cxxname}::#{@name}* ptr;
+               Data_Get_Struct(rval, #{@ns.cxxname}::#{@name}, ptr);
 
-               if ( ptr ) return *(dynamic_cast<#{@ns.name}::#{@name}*>(ptr));
+               if ( ptr ) return *(dynamic_cast< #{@ns.cxxname}::#{@name}* >(ptr));
 
-               return #{@ns.name}::#{@name}();
+               return #{@ns.cxxname}::#{@name}();
             }
 
-            VALUE cxx2ruby(const #{@ns.name}::#{@name} &object) {
-               #{@ns.name}::#{@name}* instance = new #{@ns.name}::#{@name}(object);
+            VALUE cxx2ruby(const #{@ns.cxxname}::#{@name} &object) {
+               #{@ns.cxxname}::#{@name}* instance = new #{@ns.cxxname}::#{@name}(object);
                VALUE klass = c#{varname};
 
             #{test_children}
@@ -233,8 +234,8 @@ static VALUE #{varname}_alloc(VALUE self) {
       if @enums
          @enums.each { |enum|
             ret << %@
-               static inline #{@ns.name}::#{@name}::#{enum} ruby2#{varname}_#{enum}(VALUE rval) {
-                  return static_cast<#{@ns.name}::#{@name}::#{enum}>(ruby2int(rval));
+               static inline #{@ns.cxxname}::#{@name}::#{enum} ruby2#{varname}_#{enum}(VALUE rval) {
+                  return static_cast<#{@ns.cxxname}::#{@name}::#{enum}>(ruby2int(rval));
                }
             @
          }
