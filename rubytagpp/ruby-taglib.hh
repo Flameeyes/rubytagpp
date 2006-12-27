@@ -28,6 +28,9 @@
 #include <id3v2footer.h>
 #include <id3v2extendedheader.h>
 
+/* These are the extras */
+#include "extras/wavpack/wvfile.h"
+
 using TagLib::String;
 using TagLib::StringList;
 using TagLib::ByteVector;

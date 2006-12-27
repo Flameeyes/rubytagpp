@@ -457,6 +457,37 @@
           ]
         }
       ]
+    },
+    { name: "TagLib::WavPack",
+      classes: [
+        { name: "File",
+          parent: "TagLib::File",
+          methods: [
+            { name: "File",
+              params: [
+                {name: "file", type: "char*"},
+                {name: "readProperties", type: "bool", optional: "yes"},
+                {name: "propertiesStyle", type: "TagLib::AudioProperties::ReadStyle", optional: "yes" }
+              ]
+            },
+            { name: "ID3v1Tag",
+              return: "TagLib::ID3v1::Tag*",
+              params: [ {name: "create", type: "bool", optional: "yes"} ]
+            },
+            { name: "APETag",
+              return: "TagLib::APE::Tag*",
+              params: [ {name: "create", type: "bool", optional: "yes"} ]
+            }
+          ]
+        },
+        { name: "Properties",
+          parent: "TagLib::AudioProperties",
+          methods: [
+            { name: "bitsPerSample", type: "int" },
+            { name: "version", type: "int" }
+          ]
+        }
+      ]
     }
   ]
 }
