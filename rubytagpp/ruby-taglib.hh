@@ -1,5 +1,9 @@
 /* Simple wrap-aroudn TagLib .. */
 
+#if __GNUC__ >= 4
+# pragma GCC visibility push(default)
+#endif
+
 #include <taglib.h>
 #include <tag.h>
 #include <id3v1tag.h>
@@ -27,6 +31,10 @@
 #include <apefooter.h>
 #include <id3v2footer.h>
 #include <id3v2extendedheader.h>
+
+#if __GNUC__ >= 4
+# pragma GCC visibility pop
+#endif
 
 /* These are the extras */
 #include "extras/wavpack/wvfile.h"
