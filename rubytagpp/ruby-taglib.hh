@@ -38,6 +38,7 @@
 
 /* These are the extras */
 #include "extras/wavpack/wvfile.h"
+#include "extras/speex/speexfile.h"
 
 using TagLib::String;
 using TagLib::StringList;

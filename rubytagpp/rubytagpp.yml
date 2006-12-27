@@ -458,6 +458,8 @@
         }
       ]
     },
+
+# extra plugins from Amarok SVN
     { name: "TagLib::WavPack",
       classes: [
         { name: "File",
@@ -488,6 +490,29 @@
           ]
         }
       ]
+    },
+    { name: "TagLib::Speex",
+      classes: [
+        { name: "File",
+          parent: "TagLib::Ogg::File",
+          methods: [
+            { name: "File",
+              params: [
+                {name: "file", type: "char*"},
+                {name: "readProperties", type: "bool", optional: "yes"},
+                {name: "propertiesStyle", type: "TagLib::AudioProperties::ReadStyle", optional: "yes" }
+              ]
+            }
+          ]
+        },
+        { name: "Properties",
+          parent: "TagLib::AudioProperties",
+          methods: [
+            { name: "speexVersion", type: "int" }
+          ]
+        }
+      ]
     }
+
   ]
 }
