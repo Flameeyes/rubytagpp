@@ -116,7 +116,7 @@ class FlacConverter < Converter
       extraopts = "#{extraopts} --tag=Comment=\"#{TEST_COMMENT}\" --tag=Title=\"#{TEST_TITLE}\" --tag=Album=\"#{TEST_ALBUM}\" --tag=Artist=\"#{TEST_ARTIST}\" --tag=Testfield=\"#{TEST_TESTFIELD}\"" \
          if tag
 
-      exit -1 unless system("bzcat #{ARGV[0]} | flac -f -s #{extraopts} -o #{@tmp.path} - 2>/dev/null")
+      exit -1 unless system("bzcat #{ARGV[0]} | flac -f -s #{extraopts} -o #{@tmp.path} -")
    end
 end
 
